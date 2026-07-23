@@ -523,7 +523,7 @@ poshovbuttr = {false, false, false, false, false, false, false, false, false, fa
 visbut = 0.00
 
 update_available = false
-current_version = scr.version
+current_version = "3.2.1"
 GITHUB_RAW_URL = "https://raw.githubusercontent.com/liror4ech/MHelpers/refs/heads/main/"
 VERSION_FILE = "version.txt"
 CHANGELOG_FILE = "changelog.txt"
@@ -1160,7 +1160,8 @@ local sobes = {
 	selID = imgui.ImBuffer(4),
 	logChat = {},
 	nextQ = false,
-	num = 0
+	num = 0,
+	isRunning = false   -- добавить эту строку
 }
 
 --> �������
@@ -1384,6 +1385,10 @@ function get_track_length() --> �������� ����� ���
 end
 
 function play_song(url_track, loop_track) --> �������� �����
+	if imgLabel then
+    imgui.DestroyTexture(imgLabel)
+    imgLabel = nil
+	end
 	imgNoLabel = imgui.CreateTextureFromFile(getWorkingDirectory().."/MedicalHelper/nolabel.png")
 	timetr = {0, 0}
 	track_time_hc = 0
@@ -2387,7 +2392,11 @@ function main()
 	thread = lua_thread.create(function() return end)
 	sectator = lua_thread.create(function() return end)
 	sound_reminder = lua_thread.create(function() return end)
-	
+	lua_thread.create(function()
+   		repeat wait(100) until sampIsLocalPlayerSpawned()
+    	funCMD.updateCheck()
+	end)
+
 	if not doesDirectoryExist(dirml.."/MedicalHelper/files/") then
 		print("{F54A4A}������. ����������� �����. {82E28C}�������� ����� ��� �����")
 		createDirectory(dirml.."/MedicalHelper/files/")
@@ -3056,7 +3065,6 @@ function main()
 		sampAddChatMessage("{FF8FA2}[MH]{FFFFFF} ������� � ������� ���� � ������ \"���������\" � ��������� ����������� ����������.", 0xFF8FA2)
 	end
 	--// �������� ����������
-	lua_thread.create(funCMD.updateCheck)
 	lua_thread.create(time)
 	lua_thread.create(saveCounOnl)
 	lua_thread.create(membfunc)
@@ -3422,7 +3430,7 @@ function styleAnimationClose(idWin, xWin, yWin)
 		if posWinClosed.x > 0 then
 			animka_main.posX = posWinClosed.x + (xWin/2)
 		else
-			animka_main.posX = xWin/2
+			animka_main.posX = swx + (xWin/2)
 		end
 		lua_thread.create(function()
 			animka_main.MoveAnim = true
@@ -3444,7 +3452,7 @@ function styleAnimationClose(idWin, xWin, yWin)
 		if posWinClosed.x > 0 then
 			animka_dep.posX = posWinClosed.x + (xWin/2)
 		else
-			animka_dep.posX = xWin/2
+			animka_main.posX = swx + (xWin/2)
 		end
 		lua_thread.create(function()
 			animka_dep.MoveAnim = true
@@ -3466,7 +3474,7 @@ function styleAnimationClose(idWin, xWin, yWin)
 		if posWinClosed.x > 0 then
 			animka_sob.posX = posWinClosed.x + (xWin/2)
 		else
-			animka_sob.posX = xWin/2
+		    animka_main.posX = swx + (xWin/2)
 		end
 		lua_thread.create(function()
 			animka_sob.MoveAnim = true
@@ -3488,7 +3496,7 @@ function styleAnimationClose(idWin, xWin, yWin)
 		if posWinClosed.x > 0 then
 			animka_upd.posX = posWinClosed.x + (xWin/2)
 		else
-			animka_upd.posX = xWin/2
+		    animka_main.posX = swx + (xWin/2)
 		end
 		lua_thread.create(function()
 			animka_upd.MoveAnim = true
@@ -3510,7 +3518,7 @@ function styleAnimationClose(idWin, xWin, yWin)
 		if posWinClosed.x > 0 then
 			animka_big.posX = posWinClosed.x + (xWin/2)
 		else
-			animka_big.posX = xWin/2
+		    animka_main.posX = swx + (xWin/2)
 		end
 		lua_thread.create(function()
 			animka_big.MoveAnim = true
@@ -4500,7 +4508,6 @@ function mainSet()
 		imgui.PushStyleColor(imgui.Col.ButtonHovered, imgui.ImColor(105, 105, 105, 255):GetVec4())
 		imgui.PushStyleColor(imgui.Col.ButtonActive, imgui.ImColor(60, 60, 60, 255):GetVec4())
 			if imgui.Button(u8"Проверить обновление", imgui.ImVec2(397, 26)) then 
-				funCMD.updateCheck() 
 				animka_main.paramOff = true 
 			end
 		imgui.PopStyleColor(3)
@@ -9867,6 +9874,11 @@ function ButtonDep(desk, bool) --> ��������� ������
 end
 
 function sobesRP(id)
+	if sobes.isRunning then
+    	sampAddChatMessage("{FF8FA2}[MH]{FFFFFF} Собеседование уже запущено.", 0xFF8FA2)
+    	return
+	end
+	sobes.isRunning = true
 	if id == 1 then
 		sobes.logChat[#sobes.logChat+1] = "{FFC000}��: {FFFFFF}�����������. ������� �������� ���������."
 		sobes.player.name = getPlayerNickName(tonumber(sobes.selID.v))
@@ -9877,7 +9889,10 @@ function sobesRP(id)
 		sampSendChat(string.format("/n ��������� RP, �������: /showpass %d; /showmc %d - � �������������� /me /do ", myid, myid))
 		while true do
 			wait(0)
-			if sobWin.v then
+			if not sobWin.v then
+				sober.logChat = {}
+				return
+			end
 			if sobes.player.zak ~= 0 and sobes.player.heal ~= "" then break end
 			if sampIsDialogActive() then
 				local dId = sampGetCurrentDialogId()
@@ -11216,22 +11231,69 @@ function funCMD.shpora(number)
 	end
 end
 
+-- Глобальная переменная для отслеживания статуса обновления (добавьте в начало скрипта)
+local update_downloaded = false
+
+function funCMD.updateCheck()
+    sampAddChatMessage("{FF8FA2}[MH]{FFFFFF} Поиск обновлений...", 0xFF8FA2)
+    local version_url = GITHUB_RAW_URL .. VERSION_FILE
+    local dir = dirml .. "/MedicalHelper/files/version.tmp"
+    downloadUrlToFile(version_url, dir, function(id, status, p1, p2)
+        if status == dlstatus.STATUS_ENDDOWNLOADDATA then
+            local f = io.open(dir, "r")
+            if f then
+                local remote_version = f:read("*all"):gsub("%s+", "")
+                f:close()
+                os.remove(dir)
+                if remote_version ~= current_version then
+                    update_available = true
+                    newversion = remote_version
+                    sampAddChatMessage("{FF8FA2}[MH]{4EEB40} Доступна новая версия: " .. remote_version .. ". Напиши {22E9E3}/updatemh для информации.", 0xFF8FA2)
+                    -- Загрузка changelog
+                    local changelog_url = GITHUB_RAW_URL .. CHANGELOG_FILE
+                    downloadUrlToFile(changelog_url, dirml .. "/MedicalHelper/files/changelog.tmp", function(id2, status2)
+                        if status2 == dlstatus.STATUS_ENDDOWNLOADDATA then
+                            local f2 = io.open(dirml .. "/MedicalHelper/files/changelog.tmp", "r")
+                            if f2 then
+                                updinfo = f2:read("*all")
+                                f2:close()
+                                os.remove(dirml .. "/MedicalHelper/files/changelog.tmp")
+                            end
+                        end
+                    end)
+                else
+                    sampAddChatMessage("{FF8FA2}[MH]{FFFFFF} У вас последняя версия (" .. current_version .. ").", 0xFF8FA2)
+                end
+            else
+                sampAddChatMessage("{FF8FA2}[MH]{FF0000} Не удалось проверить обновления (файл version.txt).", 0xFF8FA2)
+            end
+        elseif status == dlstatus.STATUSEX_ENDDOWNLOAD then
+            sampAddChatMessage("{FF8FA2}[MH]{FF0000} Ошибка соединения с GitHub.", 0xFF8FA2)
+        end
+    end)
+end
+
 function funCMD.doUpdate()
-	if not update_available then
-		sampAddChatMessage("{FF8FA2}[MH]{FFFFFF} Нет доступных обновлений.", 0xFF8FA2)
-		return
-	end
-	sampAddChatMessage("{FF8FA2}[MH]{FFFFFF} Начинаю загрузку новой версии...", 0xFF8FA2)
-	local dir = dirml .. "/MedicalHelper.lua"
-	downloadUrlToFile(DOWNLOAD_URL, dir, function(id, status, p1, p2)
-		if status == dlstatus.STATUS_ENDDOWNLOADDATA then
-			sampAddChatMessage("{FF8FA2}[MH]{FFFFFF} Загрузка завершена! Перезагрузка скрипта...", 0xFF8FA2)
-			reloadScripts()
-			showCursor(false)
-		elseif status == dlstatus.STATUSEX_ENDDOWNLOAD then
-			sampAddChatMessage("{FF8FA2}[MH]{FF0000} Ошибка загрузки. Проверьте ссылку.", 0xFF8FA2)
-		end
-	end)
+    if not update_available then
+        sampAddChatMessage("{FF8FA2}[MH]{FFFFFF} Нет доступных обновлений.", 0xFF8FA2)
+        return
+    end
+    sampAddChatMessage("{FF8FA2}[MH]{FFFFFF} Начинаю загрузку новой версии...", 0xFF8FA2)
+    local dir = dirml .. "/MedicalHelper.lua"
+    downloadUrlToFile(DOWNLOAD_URL, dir, function(id, status, p1, p2)
+        if status == dlstatus.STATUS_ENDDOWNLOADDATA then
+            update_downloaded = true
+            sampAddChatMessage("{FF8FA2}[MH]{FFFFFF} Загрузка завершена! Перезагрузка скрипта...", 0xFF8FA2)
+            -- Небольшая задержка, чтобы файл точно записался
+            lua_thread.create(function()
+                wait(500)
+                reloadScripts()
+                showCursor(false)
+            end)
+        elseif status == dlstatus.STATUSEX_ENDDOWNLOAD then
+            sampAddChatMessage("{FF8FA2}[MH]{FF0000} Ошибка загрузки. Проверьте ссылку.", 0xFF8FA2)
+        end
+    end)
 end
 
 local erTx =  
@@ -11270,12 +11332,8 @@ local erTx =
 		end
 	end)
 
---local url = "https://drive.google.com/u/0/uc?id=1oONMrk8eTah--0pbLJAjNgQ6xoNBOH6u&export=download" --> ������� ������ �����.lua
-
---//// �������� ����������
 function funCMD.updateCheck()
 	sampAddChatMessage("{FF8FA2}[MH]{FFFFFF} Поиск обновлений...", 0xFF8FA2)
-	
 	-- Скачиваем файл version.txt с GitHub
 	local version_url = GITHUB_RAW_URL .. VERSION_FILE
 	local dir = dirml .. "/MedicalHelper/files/version.tmp"
@@ -12045,7 +12103,7 @@ function hook.onShowDialog(id, style, title, but_1, but_2, text)
     		if not line:find('���') and not line:find('��������') then
     			local color = string.match(line, "^{(%x+)}")
 	    		--local nick, id, rank_name, rank_id, afk = string.match(line, '([A-z_0-9]+)%((%d+)%)\t(.+)%((%d+)%)%((%d+))')
-	    		local nick, id, rank_id, warns, afk, quests = string.match(line, '([A-z_0-9]+)%((%d+)%)\t.-%((%d+)%)\t(%d+) %((%d+).-\t(%d+)')
+	    		local nick, id, rank_id, warns, afk, quests = string.match(line, '([^%d]+)%((%d+)%)\t.-%((%d+)%)\t(%d+) %((%d+).-\t(%d+)')
 				local uniform = (color == 'FFFFFF')
 	    		members[#members + 1] = { 
 					nick = tostring(nick),
