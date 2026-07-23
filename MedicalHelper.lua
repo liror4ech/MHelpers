@@ -3064,7 +3064,6 @@ function main()
 		sampAddChatMessage("{FF8FA2}[MH]{FFFFFF} ������������, ��� � ��� �� ��������� �������� ����������.", 0xFF8FA2)
 		sampAddChatMessage("{FF8FA2}[MH]{FFFFFF} ������� � ������� ���� � ������ \"���������\" � ��������� ����������� ����������.", 0xFF8FA2)
 	end
-	--// �������� ����������
 	lua_thread.create(time)
 	lua_thread.create(saveCounOnl)
 	lua_thread.create(membfunc)
@@ -3074,6 +3073,7 @@ function main()
     	end
 		resTarg, pedTar = getCharPlayerIsTargeting(PLAYER_HANDLE)
 		if resTarg then
+			targID = nil
 			_, targID = sampGetPlayerIdByCharHandle(pedTar)
 			if setting2.funcPKM.func then
 			renderFontDrawText(fontPD, "[{F25D33}Num 2{FFFFFF}] - �������� ������ � ID "..targID, sx-350, sy-30, 0xFFFFFFFF)
@@ -3585,8 +3585,6 @@ function sampRegCMDLoadScript()
 		end
 	end)
 	sampRegisterChatCommand("ts", funCMD.time)
-	sampRegisterChatCommand("downloadupd", downloadupd)
-	--sampRegisterChatCommand("testmh", funCMD.testmh)
 	sampRegisterChatCommand("mh-delete", funCMD.del)
 	for i,v in ipairs(binder.list) do
 		sampRegisterChatCommand(binder.list[i].cmd, function() binderCmdStart() end)
@@ -4507,9 +4505,9 @@ function mainSet()
 		imgui.PushStyleColor(imgui.Col.Button, imgui.ImColor(85, 85, 85, 255):GetVec4())
 		imgui.PushStyleColor(imgui.Col.ButtonHovered, imgui.ImColor(105, 105, 105, 255):GetVec4())
 		imgui.PushStyleColor(imgui.Col.ButtonActive, imgui.ImColor(60, 60, 60, 255):GetVec4())
-			if imgui.Button(u8"Проверить обновление", imgui.ImVec2(397, 26)) then 
-				animka_main.paramOff = true 
-			end
+		if imgui.Button(u8"Проверить обновление", imgui.ImVec2(397, 26)) then 
+    		animka_main.paramOff = true 
+		end
 		imgui.PopStyleColor(3)
 	
 		if update_available then
@@ -4683,7 +4681,6 @@ function mainWind()
 	imgui.SameLine()
 	imgui.SetCursorPosX(825)
 	imgui.SetCursorPosY(6)
-	--iconwin.v = true --findes
 	if imgui.InvisibleButton(u8" ", imgui.ImVec2(24, 24)) or animka_main.paramOff then 
 		posWinClosed = imgui.GetWindowPos()
 		styleAnimationClose(1, 854, 465)
@@ -8393,123 +8390,39 @@ function imgui.OnDrawFrame()
 	end
 
 	if updWin.v then
-		if not animka_upd.MoveAnim then
-			seelU = imgui.Cond.FirstUseEver
-		else
-			seelU = imgui.Cond.Always
-		end
-		local sw, sh = getScreenResolution()
-		imgui.SetNextWindowSize(imgui.ImVec2(700, 420), seelU)
-		imgui.SetNextWindowPos(imgui.ImVec2(animka_upd.posX, animka_upd.posY), seelU, imgui.ImVec2(0.5, 0.5))
-		imgui.Begin(fa.ICON_DOWNLOAD .. u8" �������� ����������.", updWin, imgui.WindowFlags.NoCollapse + imgui.WindowFlags.NoResize + imgui.WindowFlags.NoTitleBar);
-		imgui.SetCursorPosX(268)
-			imgui.PushFont(fontsize)
-			imgui.SetCursorPosY(6)
-			imgui.Text(u8"�������� ����������")
-			imgui.PopFont()
-			imgui.SameLine()
-			imgui.SetCursorPosX(670)
-			imgui.SetCursorPosY(6)
-			if imgui.InvisibleButton(u8" ", imgui.ImVec2(24, 24)) or animka_upd.paramOff then 
-				posWinClosed = imgui.GetWindowPos()
-				styleAnimationClose(4, 700, 420)
-				animka_upd.paramOff = false
-			end
-			if imgui.IsItemHovered() then
-				imgui.SameLine()
-				imgui.SetCursorPosX(675)
-				imgui.SetCursorPosY(3)
-				imgui.PushFont(fa_font2)
-				imgui.TextColored(imgui.ImVec4(1.0, 0.56, 0.64 ,1.00), fa.ICON_TIMES)
-				imgui.PopFont()
-			else
-				imgui.SameLine()
-				imgui.SetCursorPosX(675)
-				imgui.SetCursorPosY(3)
-				imgui.PushFont(fa_font2)
-				imgui.Text(fa.ICON_TIMES)
-				imgui.PopFont()
-			end
-			imgui.Separator()
-			imgui.Dummy(imgui.ImVec2(0, 1))
-		imgui.SetWindowFontScale(1.1)
-		imgui.SetCursorPosX(252)
-		imgui.Text(u8"���������� �� ����������")
-		imgui.Dummy(imgui.ImVec2(0, 10))
-		if #updinfo < 5 then
-			imgui.SetCursorPos(imgui.ImVec2(242, 150))
-			imgui.TextColoredRGB("{72F566}���������� �� ����������")
-			imgui.SetCursorPosX(212)
-			imgui.TextColoredRGB("{72F566}�� ����������� ����� ����� ������")
-		else
-			if not upd_release and not upd_beta and scrvers == newversr then
-				imgui.SetCursorPosX(120)
-				imgui.TextColored(imgui.ImColor(0, 255, 0, 225):GetVec4(), fa.ICON_CHECK); imgui.SameLine()
-				imgui.TextColoredRGB("�� ����������� ��������� ����������. ������� ������: {72F566}"..scr.version)
-				imgui.SetCursorPosX(222)
-				imgui.TextColoredRGB("{F8A436}��� ���� ��������� � ������� ���: ")
-				imgui.Spacing()
-				imgui.BeginChild("update log", imgui.ImVec2(0, 0), true)
-				if doesFileExist(dirml.."/MedicalHelper/files/update.txt") then
-					for line in io.lines(dirml.."/MedicalHelper/files/update.txt") do
-						imgui.TextColoredRGB(line:gsub("*n*", "\n"))
-					end
-				end
-				imgui.EndChild()
-			elseif not upd_release and not upd_beta and scrvers > newversr  then
-				imgui.SetCursorPosX(120)
-				imgui.TextColored(imgui.ImColor(0, 255, 0, 225):GetVec4(), fa.ICON_CHECK); imgui.SameLine()
-				imgui.TextColoredRGB("�� ����������� ��������� ����������. ������� ������: {72F566}"..scr.version)
-				imgui.SetCursorPosX(222)
-				imgui.TextColoredRGB("{F8A436}��� ���� ��������� � ������� ���: ")
-				imgui.Spacing()
-				imgui.BeginChild("update log", imgui.ImVec2(0, 0), true)
-				if doesFileExist(dirml.."/MedicalHelper/files/updatebeta.txt") then
-					for line in io.lines(dirml.."/MedicalHelper/files/updatebeta.txt") do
-						imgui.TextColoredRGB(line:gsub("*n*", "\n"))
-					end
-				end
-				imgui.EndChild()
-			elseif not upd_release and upd_beta then
-				imgui.SetCursorPosX(70) 
-				imgui.TextColored(imgui.ImColor(255, 200, 0, 225):GetVec4(), fa.ICON_EXCLAMATION_TRIANGLE); imgui.SameLine()
-				imgui.TextColoredRGB("�� ����������� ���������� ���� ������ �������. ������� ����� ���� ������.")
-				imgui.SetCursorPosX(185) 
-				imgui.TextColoredRGB("����� ������ ����: {72F566}"..newversionbeta.."{FFFFFF}. ������� ����: {EE4747}"..scr.version)
-				imgui.SetCursorPosX(282)
-				imgui.TextColoredRGB("{F8A436}��� ���� ���������:")
-				imgui.Spacing()
-				imgui.BeginChild("update log", imgui.ImVec2(0, 230), true)
-				if doesFileExist(dirml.."/MedicalHelper/files/updatebeta.txt") then
-					for line in io.lines(dirml.."/MedicalHelper/files/updatebeta.txt") do
-						imgui.TextColoredRGB(line:gsub("*n*", "\n"))
-					end
-				end
-				imgui.EndChild()
-				imgui.SetCursorPosX(212)
-				--if imgui.Button(fa.ICON_DOWNLOAD .. u8" ���������� ���� ������", imgui.ImVec2(250, 30)) then funCMD.updatebeta() end
-			elseif upd_release then
-				imgui.SetCursorPosX(182) 
-				imgui.TextColored(imgui.ImColor(255, 200, 0, 225):GetVec4(), fa.ICON_EXCLAMATION_TRIANGLE); imgui.SameLine()
-				imgui.TextColoredRGB("�� ����������� ���������� ������ �������.")
-				imgui.SetCursorPosX(183) 
-				imgui.TextColoredRGB("����� ����� ������: {72F566}"..newversion.."{FFFFFF}. ������� ����: {EE4747}"..scr.version)
-				imgui.SetCursorPosX(282)
-				imgui.TextColoredRGB("{F8A436}��� ���� ���������:")
-				imgui.Spacing()
-				imgui.BeginChild("update log", imgui.ImVec2(0, 230), true)
-				if doesFileExist(dirml.."/MedicalHelper/files/update.txt") then
-					for line in io.lines(dirml.."/MedicalHelper/files/update.txt") do
-						imgui.TextColoredRGB(line:gsub("*n*", "\n"))
-					end
-				end
-				imgui.EndChild()
-				imgui.SetCursorPosX(192)
-				--if imgui.Button(fa.ICON_DOWNLOAD .. u8" ���������� ����� ����� ������", imgui.ImVec2(270, 30)) then funCMD.updaterelease() end
-			end
-		end
-		imgui.End()
-	end
+    if not animka_upd.MoveAnim then seelU = imgui.Cond.FirstUseEver else seelU = imgui.Cond.Always end
+    local sw, sh = getScreenResolution()
+    imgui.SetNextWindowSize(imgui.ImVec2(700, 420), seelU)
+    imgui.SetNextWindowPos(imgui.ImVec2(animka_upd.posX, animka_upd.posY), seelU, imgui.ImVec2(0.5, 0.5))
+    imgui.Begin(fa.ICON_DOWNLOAD .. u8"  Проверка обновлений.", updWin, imgui.WindowFlags.NoCollapse + imgui.WindowFlags.NoResize + imgui.WindowFlags.NoTitleBar)
+    -- ... заголовок и кнопка закрытия ...
+    if update_available then
+        imgui.SetCursorPosX(120)
+        imgui.TextColored(imgui.ImColor(255, 200, 0, 225):GetVec4(), fa.ICON_EXCLAMATION_TRIANGLE); imgui.SameLine()
+        imgui.TextColoredRGB("Доступна новая версия: {72F566}"..newversion)
+        imgui.SetCursorPosX(282)
+        imgui.TextColoredRGB("{F8A436}Список изменений:")
+        imgui.Spacing()
+        imgui.BeginChild("update log", imgui.ImVec2(0, 230), true)
+        if updinfo then
+            for line in updinfo:gmatch("[^\n]+") do
+                imgui.TextColoredRGB(line)
+            end
+        else
+            imgui.Text("Информация не загружена.")
+        end
+        imgui.EndChild()
+        imgui.SetCursorPosX(192)
+        if imgui.Button(fa.ICON_DOWNLOAD .. u8"  Обновить", imgui.ImVec2(270, 30)) then
+            funCMD.doUpdate()
+        end
+    else
+        imgui.SetCursorPosX(120)
+        imgui.TextColored(imgui.ImColor(0, 255, 0, 225):GetVec4(), fa.ICON_CHECK); imgui.SameLine()
+        imgui.TextColoredRGB("У вас последняя версия ({72F566}"..scr.version..")")
+    end
+    imgui.End()
+end
 	if profbWin.v then
 		profbWind()
 	end
@@ -9890,8 +9803,9 @@ function sobesRP(id)
 		while true do
 			wait(0)
 			if not sobWin.v then
-				sober.logChat = {}
-				return
+   				sobes.logChat = {}
+   				sobes.isRunning = false
+   				return
 			end
 			if sobes.player.zak ~= 0 and sobes.player.heal ~= "" then break end
 			if sampIsDialogActive() then
@@ -9921,10 +9835,10 @@ function sobesRP(id)
 											wait(1700)
 											sampSendChat("�� �������� � ׸���� ������ "..u8:decode(chgName.org[num_org.v+1]))
 										sobes.player.bl = list_org_BL[num_org.v+1]
-									--	sobes.getStats = false
+										sobes.isRunning = false
 										return
 									end
-								else --player = {name = "", let = 0, zak = 0, work = "", bl = "", heal = "", narko = 0},
+								else
 									table.insert(sobes.logChat, "{54A8F2}"..sobes.player.name.."{FFFFFF}: �������(�) �������. ������������ �����������������.")
 										sampSendChat("���������, �� �� ��� �� ���������.")
 										wait(1700)
@@ -9933,7 +9847,8 @@ function sobesRP(id)
 										sampSendChat("/n ���������� ���������������� 35+")
 										wait(1700)
 										sampSendChat("��������� � ��������� ���.")
-								--	sobes.getStats = false
+								
+									sobes.isRunning = false
 									return
 								end
 							else
@@ -9943,7 +9858,8 @@ function sobesRP(id)
 									sampSendChat("���������� ��� ������� ��������� 3 ���� � �����.")
 									wait(1700)
 									sampSendChat("��������� � ��������� ���.")
-							--	sobes.getStats = false
+							
+								sobes.isRunning = false
 								return
 							end
 						else
@@ -9972,11 +9888,6 @@ function sobesRP(id)
 										wait(1700)
 										sampSendChat("/n /showpass "..myid)
 									end
-									-- sampSendChat("���������, �� �� ������ ����������������.")
-									-- wait(1700)
-									-- sampSendChat("�� ������ ���������� �� ����� ��� ������ � ��������� ���.")
-									--	sobes.getStats = false
-									--	return
 								end
 							else 
 								table.insert(sobes.logChat, "{54A8F2}"..sobes.player.name.."{FFFFFF}: �������(�) ���.�����. �� ������.")
@@ -9984,8 +9895,6 @@ function sobesRP(id)
 								wait(1700)
 								sampSendChat("� ��� �������� �� ���������. ������� ����������� �����������.")
 								sobes.player.heal = "������� ����������"
-								--	sobes.getStats = false
-								--	return
 							end
 						else
 							table.insert(sobes.logChat, "{E74E28}[������]{FFFFFF}: ���-�� ������ ������� �������� ���.�����.") 
@@ -10000,6 +9909,7 @@ function sobesRP(id)
 		if sobes.player.work == "��� ������" then
 			sampSendChat("�������, � ��� �� � ������� � �����������.")
 			sobes.nextQ = true
+			sobes.isRunning = false
 			return
 		else
 			sampSendChat("�������, � ��� �� � ������� � �����������.")
@@ -10010,6 +9920,7 @@ function sobesRP(id)
 			wait(2000)
 			sampSendChat("/n ��������� � ������� ������� /out ��� ������ Titan VIP ��� ��������� � �����.")
 			sobes.nextQ = true
+			sobes.isRunning = false
 			return
 		end
 	end
@@ -10018,10 +9929,14 @@ function sobesRP(id)
 		wait(1700)
 		table.insert(sobes.logChat, "{FFC000}��: {FFFFFF}������: � ����� ����� �� ������ ���������� � ��� � ��������?.")
 		sampSendChat("� ����� ����� �� ������ ���������� � ��� � ��������?")
+		sobes.isRunning = false
+		return
 	end
 	if id == 3 then
 		table.insert(sobes.logChat, "{FFC000}��: {FFFFFF}������: ���� �� � ��� ����.����� \"Discord\"?.")
 		sampSendChat("���� �� � ��� ����.����� \"Discord\"?.")
+		sobes.isRunning = false
+		return
 	end
 	if id == 4 then
 	table.insert(sobes.logChat, "{FFC000}��: {FFFFFF}�������� ������...")
@@ -10037,6 +9952,8 @@ function sobesRP(id)
 			sobes.logChat = {}
 			sobes.nextQ = false
 			sobes.num = 0
+			sobes.isRunning = false
+			return
 		else
 		if sampIsPlayerConnected(sobes.selID.v) and id ~= sampGetPlayerIdByCharHandle(playerPed) then
 			nick = getPlayerNickName(sobes.selID.v)
@@ -10063,6 +9980,8 @@ function sobesRP(id)
 			sobes.logChat = {}
 			sobes.nextQ = false
 			sobes.num = 0
+			sobes.isRunning = false
+			return
 		end
 	end
 	if id == 5 then
@@ -10076,6 +9995,8 @@ function sobesRP(id)
 		sobes.logChat = {}
 		sobes.nextQ = false
 		sobes.num = 0
+		sobes.isRunning = false
+		return
 	end
 	if id == 6 then
 		wait(1000)
@@ -10086,6 +10007,8 @@ function sobesRP(id)
 		sobes.logChat = {}
 		sobes.nextQ = false
 		sobes.num = 0
+		sobes.isRunning = false
+		return
 	end
 	if id == 7 then --sampSendChat("")
 		wait(1000)
@@ -10098,6 +10021,8 @@ function sobesRP(id)
 		sobes.logChat = {}
 		sobes.nextQ = false
 		sobes.num = 0
+		sobes.isRunning = false
+		return
 	end
 	if id == 8 then
 		wait(1000)
@@ -10112,6 +10037,8 @@ function sobesRP(id)
 		sobes.logChat = {}
 		sobes.nextQ = false
 		sobes.num = 0
+		sobes.isRunning = false
+		return
 	end
 	if id == 9 then
 		wait(1000)
@@ -10124,6 +10051,8 @@ function sobesRP(id)
 		sobes.logChat = {}
 		sobes.nextQ = false
 		sobes.num = 0
+		sobes.isRunning = false
+		return
 	end
 	if id == 10 then
 		wait(1000)
@@ -10134,6 +10063,8 @@ function sobesRP(id)
 		sobes.logChat = {}
 		sobes.nextQ = false
 		sobes.num = 0
+		sobes.isRunning = false
+		return
 	end
 	if id == 11 then
 		wait(1000)
@@ -10146,7 +10077,11 @@ function sobesRP(id)
 		sobes.logChat = {}
 		sobes.nextQ = false
 		sobes.num = 0
+		sobes.isRunning = false
+		return
 	end
+	-- fallback (если вдруг не сработал ни один id)
+	sobes.isRunning = false
 end
 
 function HideDialogInTh(bool)
@@ -12009,7 +11944,7 @@ function postGet(sel)
 	coord[12].x, coord[12].y = 223, 1813.5
 
 	if sel ~= nil and isCharInArea2d(PLAYER_PED, coord[sel].x-50, coord[sel].y-50, coord[sel].x+50, coord[sel].y+50,false) then
-		local coord = {}
+		local coords = {}   -- правильное имя
 		coords.x, coords.y = coord[sel].x, coord[sel].y
 		return true, postname, coords
 	end
