@@ -528,7 +528,6 @@ GITHUB_RAW_URL = "https://raw.githubusercontent.com/liror4ech/MHelpers/refs/head
 VERSION_FILE = "version.txt"
 CHANGELOG_FILE = "changelog.txt"
 SCRIPT_FILE = "MedicalHelper.lua"
-
 DOWNLOAD_URL = GITHUB_RAW_URL .. SCRIPT_FILE
 
 --> ����������������� ����������
