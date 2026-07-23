@@ -524,7 +524,7 @@ visbut = 0.00
 
 update_available = false
 current_version = scr.version
-GITHUB_RAW_URL = "https://raw.githubusercontent.com/liror4ech/MHelpers/refs/heads/main/MedicalHelper.lua"
+GITHUB_RAW_URL = "https://raw.githubusercontent.com/liror4ech/MHelpers/refs/heads/main/"
 VERSION_FILE = "version.txt"
 CHANGELOG_FILE = "changelog.txt"
 SCRIPT_FILE = "MedicalHelper.lua"
