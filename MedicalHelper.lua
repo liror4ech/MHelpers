@@ -1,5 +1,5 @@
 script_name("MedicalHelper")
-script_authors("Alberto Kane")
+script_authors("by GiVKa")
 script_description("Script for the Ministries of Health Arizona Role Play")
 script_version("3.2.0")
 script_properties("work-in-pause")
