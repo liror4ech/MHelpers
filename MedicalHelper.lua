@@ -1,5 +1,5 @@
 script_name("MedicalHelper")
-script_authors("by GiVKa")
+script_authors("Alberto Kane")
 script_description("Script for the Ministries of Health Arizona Role Play")
 script_version("3.2.0")
 script_properties("work-in-pause")
@@ -522,20 +522,14 @@ poshovbut = 2
 poshovbuttr = {false, false, false, false, false, false, false, false, false, false}
 visbut = 0.00
 
--- Параметры обновлений через GitHub
 update_available = false
-current_version = scr.version  -- например, "3.2.0"
--- Ссылки на ваш репозиторий (ЗАМЕНИТЕ НА СВОИ)
-GITHUB_RAW_URL = "https://github.com/liror4ech/MHelpers.git"
--- Файл с номером версии (просто число, например, 3.2.1)
+current_version = scr.version
+GITHUB_RAW_URL = "https://raw.githubusercontent.com/liror4ech/MHelpers/refs/heads/main/MedicalHelper.lua"
 VERSION_FILE = "version.txt"
--- Файл со списком изменений
 CHANGELOG_FILE = "changelog.txt"
--- Прямая ссылка на сам скрипт (для загрузки)
 SCRIPT_FILE = "MedicalHelper.lua"
--- Полный URL для скачивания скрипта
+
 DOWNLOAD_URL = GITHUB_RAW_URL .. SCRIPT_FILE
--- (опционально) ссылка на релизную версию, если хотите разделять
 
 --> ����������������� ����������
 local trstl1 = {['ph'] = '�',['Ph'] = '�',['Ch'] = '�',['ch'] = '�',['Th'] = '�',['th'] = '�',['Sh'] = '�',['sh'] = '�', ['ea'] = '�',['Ae'] = '�',['ae'] = '�',['size'] = '����',['Jj'] = '��������',['Whi'] = '���',['lack'] = '���',['whi'] = '���',['Ck'] = '�',['ck'] = '�',['Kh'] = '�',['kh'] = '�',['hn'] = '�',['Hen'] = '���',['Zh'] = '�',['zh'] = '�',['Yu'] = '�',['yu'] = '�',['Yo'] = '�',['yo'] = '�',['Cz'] = '�',['cz'] = '�', ['ia'] = '�', ['ea'] = '�',['Ya'] = '�', ['ya'] = '�', ['ove'] = '��',['ay'] = '��', ['rise'] = '����',['oo'] = '�', ['Oo'] = '�', ['Ee'] = '�', ['ee'] = '�', ['Un'] = '��', ['un'] = '��', ['Ci'] = '��', ['ci'] = '��', ['yse'] = '��', ['cate'] = '����', ['eow'] = '��', ['rown'] = '����', ['yev'] = '���', ['Babe'] = '�����', ['Jason'] = '�������', ['liy'] = '���', ['ane'] = '���', ['ame'] = '���'}
@@ -11241,7 +11235,6 @@ function funCMD.doUpdate()
 	end)
 end
 
---function funCMD.updateEr()
 local erTx =  
 [[
 {FFFFFF}������, ���-�� ������ ���������� ����������.
@@ -11277,7 +11270,6 @@ local erTx =
 			showCursor(false)
 		end
 	end)
-end
 
 --local url = "https://drive.google.com/u/0/uc?id=1oONMrk8eTah--0pbLJAjNgQ6xoNBOH6u&export=download" --> ������� ������ �����.lua
 
