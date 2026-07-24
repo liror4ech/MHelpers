@@ -556,7 +556,7 @@ if name:match('%a+') then
  return name
 end
 
-local setting = {
+setting = {
 	nick = "",
 	teg = "",
 	org = 0,
@@ -5154,7 +5154,7 @@ function mainWind()
 	else
 		seelM = imgui.Cond.Always
 	end
-	local sw, sh = getScreenResolution()
+	sw, sh = getScreenResolution()
 	imgui.SetNextWindowSize(imgui.ImVec2(854, 465), seelM)
 	imgui.SetNextWindowPos(imgui.ImVec2(animka_main.posX, animka_main.posY), seelM, imgui.ImVec2(0.5, 0.5))
 	imgui.Begin(fa.ICON_HEARTBEAT .. " Medical Helper by Kane "..scr.version.. u8" Меню", mainWin, imgui.WindowFlags.NoCollapse + imgui.WindowFlags.NoResize + imgui.WindowFlags.NoTitleBar + imgui.WindowFlags.NoScrollbar + imgui.WindowFlags.NoScrollWithMouse);
@@ -5189,7 +5189,7 @@ function mainWind()
 	imgui.Separator()
 	
 	imgui.SetCursorPos(imgui.ImVec2(-10, getposcur + 37))
-	local p = imgui.GetCursorScreenPos()
+	p = imgui.GetCursorScreenPos()
 	imgui.GetWindowDrawList():AddRectFilled(imgui.ImVec2(p.x, p.y), imgui.ImVec2(p.x + 153, p.y + 40), imgui.GetColorU32(imgui.ImVec4(1.00, 1.00, 1.00 ,0.10)), 10, 15)
 	if poshovbuttr[1] or poshovbuttr[2] or poshovbuttr[3] or poshovbuttr[4] or poshovbuttr[5] or poshovbuttr[6] or poshovbuttr[7] or poshovbuttr[9] or poshovbuttr[10] then
 		visbut = 0.05
@@ -5197,7 +5197,7 @@ function mainWind()
 		visbut = 0.00
 	end
 	imgui.SetCursorPos(imgui.ImVec2(-10, poshovbut + 37))
-	local p = imgui.GetCursorScreenPos()
+	p = imgui.GetCursorScreenPos()
 	imgui.GetWindowDrawList():AddRectFilled(imgui.ImVec2(p.x, p.y), imgui.ImVec2(p.x + 153, p.y + 40), imgui.GetColorU32(imgui.ImVec4(1.00, 1.00, 1.00 ,visbut)), 10, 15)
 	imgui.GetCursorStartPos()
 	
@@ -5364,7 +5364,7 @@ function mainWind()
 	imgui.GetCursorStartPos()
 	imgui.EndChild();	
 	if select_menu[1] then
-		local colorInfo = imgui.ImColor(240, 170, 40, 255):GetVec4()
+		colorInfo = imgui.ImColor(240, 170, 40, 255):GetVec4()
 		imgui.SameLine()
 		imgui.BeginGroup()
 		imgui.BeginGroup()
@@ -5373,7 +5373,7 @@ function mainWind()
 		imgui.SameLine();
 		imgui.SetCursorPosX(168)
 		imgui.SetCursorPosY(255)
-		local p = imgui.GetCursorScreenPos()
+		p = imgui.GetCursorScreenPos()
 		imgui.GetWindowDrawList():AddRectFilled(imgui.ImVec2(p.x, p.y), imgui.ImVec2(p.x + 125, p.y + 75), imgui.GetColorU32(imgui.ImVec4(1.00, 0.56, 0.64 ,0.90)), 10, 15)
 		imgui.GetWindowDrawList():AddCircleFilled(imgui.ImVec2(p.x+63, p.y-30), 52, imgui.GetColorU32(imgui.GetStyle().Colors[imgui.Col.WindowBg]), 60)
 		imgui.GetWindowDrawList():AddCircleFilled(imgui.ImVec2(p.x+63, p.y-40), 50, imgui.GetColorU32(imgui.ImVec4(1.00, 0.56, 0.64 ,0.90)), 60)
@@ -5406,25 +5406,24 @@ function mainWind()
 		imgui.EndGroup()
 		imgui.EndGroup()
 	end
-	
 	if select_menu[2] then
 		imgui.SameLine()
 		imgui.BeginGroup()
-		local function Separatordraw(xsep, ysep, pxs)
+		function Separatordraw(xsep, ysep, pxs)
 			imgui.SetCursorPos(imgui.ImVec2(xsep, ysep))
-			local p = imgui.GetCursorScreenPos()
+			p = imgui.GetCursorScreenPos()
 			imgui.GetWindowDrawList():AddRectFilled(imgui.ImVec2(p.x, p.y), imgui.ImVec2(p.x + pxs, p.y + 1), imgui.GetColorU32(imgui.ImVec4(0.35, 0.35, 0.35 ,1.00)))
 		end
-		local function IconsBackground(xicon, yicon, imvec)
+		function IconsBackground(xicon, yicon, imvec)
 			imgui.SetCursorPos(imgui.ImVec2(xicon, yicon))
-			local p = imgui.GetCursorScreenPos()
+			p = imgui.GetCursorScreenPos()
 			imgui.GetWindowDrawList():AddRectFilled(imgui.ImVec2(p.x, p.y), imgui.ImVec2(p.x + 24, p.y + 24), imgui.GetColorU32(imvec), 5, 15)
 		end
 		
 		imgui.SetCursorPos(imgui.ImVec2(158, 49))
 		if imgui.InvisibleButton(u8"##Настройки профиля", imgui.ImVec2(234, 37)) then sel_menu_set = 1 end
 		imgui.SetCursorPos(imgui.ImVec2(156, 47))
-		local p = imgui.GetCursorScreenPos()
+		p = imgui.GetCursorScreenPos()
 		if imgui.IsItemActive() and sel_menu_set ~= 1 then
 			imgui.GetWindowDrawList():AddRectFilled(imgui.ImVec2(p.x, p.y), imgui.ImVec2(p.x + 237, p.y + 38), imgui.GetColorU32(imgui.ImVec4(0.10, 0.10, 0.10 ,1.00)), 10, 3)
 		elseif imgui.IsItemHovered() and sel_menu_set ~= 1 then
@@ -5450,7 +5449,7 @@ function mainWind()
 		imgui.SetCursorPos(imgui.ImVec2(158, 86))
 		if imgui.InvisibleButton(u8"##Настройки игры", imgui.ImVec2(234, 37)) then sel_menu_set = 2 end
 		imgui.SetCursorPos(imgui.ImVec2(156, 85))
-		local p = imgui.GetCursorScreenPos()
+		p = imgui.GetCursorScreenPos()
 		if imgui.IsItemActive() and sel_menu_set ~= 2 then
 			imgui.GetWindowDrawList():AddRectFilled(imgui.ImVec2(p.x, p.y), imgui.ImVec2(p.x + 237, p.y + 38), imgui.GetColorU32(imgui.ImVec4(0.10, 0.10, 0.10 ,1.00)))
 		elseif imgui.IsItemHovered() and sel_menu_set ~= 2 then
@@ -5481,7 +5480,7 @@ function mainWind()
 		imgui.SetCursorPos(imgui.ImVec2(158, 124))
 		if imgui.InvisibleButton(u8"##Настройки персонажа", imgui.ImVec2(234, 37)) then sel_menu_set = 3 end
 		imgui.SetCursorPos(imgui.ImVec2(156, 123))
-		local p = imgui.GetCursorScreenPos()
+		p = imgui.GetCursorScreenPos()
 		if imgui.IsItemActive() and sel_menu_set ~= 3 then
 			imgui.GetWindowDrawList():AddRectFilled(imgui.ImVec2(p.x, p.y), imgui.ImVec2(p.x + 237, p.y + 38), imgui.GetColorU32(imgui.ImVec4(0.10, 0.10, 0.10 ,1.00)))
 		elseif imgui.IsItemHovered() and sel_menu_set ~= 3 then
@@ -5513,7 +5512,7 @@ function mainWind()
 		imgui.SetCursorPos(imgui.ImVec2(158, 162))
 		if imgui.InvisibleButton(u8"##Настройки", imgui.ImVec2(234, 37)) then sel_menu_set = 7 end
 		imgui.SetCursorPos(imgui.ImVec2(156, 161))
-		local p = imgui.GetCursorScreenPos()
+		p = imgui.GetCursorScreenPos()
 		if imgui.IsItemActive() and sel_menu_set ~= 7 then
 			imgui.GetWindowDrawList():AddRectFilled(imgui.ImVec2(p.x, p.y), imgui.ImVec2(p.x + 237, p.y + 38), imgui.GetColorU32(imgui.ImVec4(0.10, 0.10, 0.10 ,1.00)), 10, 12)
 		elseif imgui.IsItemHovered() and sel_menu_set ~= 7 then
@@ -5545,7 +5544,7 @@ function mainWind()
 		imgui.SetCursorPos(imgui.ImVec2(158, 220))
 		if imgui.InvisibleButton(u8"##Настройки", imgui.ImVec2(234, 37)) then sel_menu_set = 5 end
 		imgui.SetCursorPos(imgui.ImVec2(156, 219))
-		local p = imgui.GetCursorScreenPos()
+		p = imgui.GetCursorScreenPos()
 		if imgui.IsItemActive() and sel_menu_set ~= 5 then
 			imgui.GetWindowDrawList():AddRectFilled(imgui.ImVec2(p.x, p.y), imgui.ImVec2(p.x + 237, p.y + 38), imgui.GetColorU32(imgui.ImVec4(0.10, 0.10, 0.10 ,1.00)), 10, 3)
 		elseif imgui.IsItemHovered() and sel_menu_set ~= 5 then
@@ -5572,7 +5571,7 @@ function mainWind()
 		imgui.SetCursorPos(imgui.ImVec2(158, 258))
 		if imgui.InvisibleButton(u8"##Настройки уведомлений", imgui.ImVec2(234, 37)) then sel_menu_set = 6 end
 		imgui.SetCursorPos(imgui.ImVec2(156, 257))
-		local p = imgui.GetCursorScreenPos()
+		p = imgui.GetCursorScreenPos()
 		if imgui.IsItemActive() and sel_menu_set ~= 6 then
 			imgui.GetWindowDrawList():AddRectFilled(imgui.ImVec2(p.x, p.y), imgui.ImVec2(p.x + 237, p.y + 38), imgui.GetColorU32(imgui.ImVec4(0.10, 0.10, 0.10 ,1.00)))
 		elseif imgui.IsItemHovered() and sel_menu_set ~= 6 then
@@ -5604,7 +5603,7 @@ function mainWind()
 		imgui.SetCursorPos(imgui.ImVec2(158, 296))
 		if imgui.InvisibleButton(u8"##Настройки профиля", imgui.ImVec2(234, 37)) then sel_menu_set = 4 end
 		imgui.SetCursorPos(imgui.ImVec2(156, 295))
-		local p = imgui.GetCursorScreenPos()
+		p = imgui.GetCursorScreenPos()
 		if imgui.IsItemActive() and sel_menu_set ~= 4 then
 			imgui.GetWindowDrawList():AddRectFilled(imgui.ImVec2(p.x, p.y), imgui.ImVec2(p.x + 237, p.y + 38), imgui.GetColorU32(imgui.ImVec4(0.10, 0.10, 0.10 ,1.00)))
 		elseif imgui.IsItemHovered() and sel_menu_set ~= 4 then
@@ -5646,7 +5645,7 @@ function mainWind()
 			sel_menu_set = 8 
 		end
 		imgui.SetCursorPos(imgui.ImVec2(156, 333))
-		local p = imgui.GetCursorScreenPos()
+		p = imgui.GetCursorScreenPos()
 		if imgui.IsItemActive() and sel_menu_set ~= 8 then
 			imgui.GetWindowDrawList():AddRectFilled(imgui.ImVec2(p.x, p.y), imgui.ImVec2(p.x + 237, p.y + 38), imgui.GetColorU32(imgui.ImVec4(0.10, 0.10, 0.10 ,1.00)), 10, 12)
 		elseif imgui.IsItemHovered() and sel_menu_set ~= 8 then
@@ -5810,7 +5809,7 @@ function mainWind()
 			rkeys.unRegisterHotKey(cmdBind[selected_cmd].key)
 			unRegisterHotKey(cmdBind[selected_cmd].key)
 			cmdBind[selected_cmd].key = {}
-			local f = io.open(dirml.."/MedicalHelper/cmdSetting.med", "w")
+			f = io.open(dirml.."/MedicalHelper/cmdSetting.med", "w")
 			f:write(encodeJson(cmdBind))
 			f:flush()
 			f:close()
@@ -5898,7 +5897,7 @@ function mainWind()
 			if imgui.Button(u8"Редактировать шпору##shpora", imgui.ImVec2(226, 25)) then
 				activebutanim3[1] = true
 				spur.edit = true
-				local f = io.open(dirml.."/MedicalHelper/шпаргалки/"..spur.list[spur.select_spur]..".txt", "r")
+				f = io.open(dirml.."/MedicalHelper/шпаргалки/"..spur.list[spur.select_spur]..".txt", "r")
 				spur.text.v = u8(f:read("*a"))
 				f:close()
 				spur.name.v = u8(spur.list[spur.select_spur])
@@ -5932,7 +5931,7 @@ function mainWind()
 						spur.name.v = ""
 						spur.text.v = ""
 						spurBig.v = false
-						local f = io.open(dirml.."/MedicalHelper/шпаргалки/шпора '"..i.."'.txt", "w")
+						f = io.open(dirml.."/MedicalHelper/шпаргалки/шпора '"..i.."'.txt", "w")
 						f:write("")
 						f:flush()
 						f:close()
@@ -5999,8 +5998,8 @@ function mainWind()
 			imgui.SameLine()
 			if imgui.Button(u8"Сохранить", imgui.ImVec2(317, 25)) then
 				activebutanim3[2] = true
-				local name = ""
-				local bool = false
+				name = ""
+				bool = false
 				if spur.name.v ~= "" then 
 					name = u8:decode(spur.name.v)
 					if doesFileExist(dirml.."/MedicalHelper/шпаргалки/"..name..".txt") and spur.list[spur.select_spur] ~= name then
@@ -6014,7 +6013,7 @@ function mainWind()
 					name = spur.list[spur.select_spur]
 				end
 				if not bool then
-					local f = io.open(dirml.."/MedicalHelper/шпаргалки/"..name..".txt", "w")
+					f = io.open(dirml.."/MedicalHelper/шпаргалки/"..name..".txt", "w")
 					f:write(u8:decode(spur.text.v))
 					f:flush()
 					f:close()
@@ -6064,7 +6063,7 @@ function mainWind()
 					binder.cmd.v = u8(binder.list[binder.select_bind].cmd)
 					binder.key = binder.list[binder.select_bind].key
 					if doesFileExist(dirml.."/MedicalHelper/Binder/bind-"..binder.list[binder.select_bind].name..".txt") then
-						local f = io.open(dirml.."/MedicalHelper/Binder/bind-"..binder.list[binder.select_bind].name..".txt", "r")
+						f = io.open(dirml.."/MedicalHelper/Binder/bind-"..binder.list[binder.select_bind].name..".txt", "r")
 						binder.text.v = u8(f:read("*a"))
 						f:flush()
 						f:close()
@@ -6088,7 +6087,7 @@ function mainWind()
 		if imgui.Button(u8"Создать новый##биндер", imgui.ImVec2(689, 25)) then
 			if #binder.list < 100 then
 				for i = 1, 100 do
-					local bool = false
+					bool = false
 					for ix,v in ipairs(binder.list) do
 						if v.name == "Noname bind '"..i.."'" then bool = true end
 					end
@@ -6251,7 +6250,7 @@ function mainWind()
 			end		
 			if select_menu[4] then
 				if imgui.Button(u8"Применить", imgui.ImVec2(174, 0)) then
-					local exits = false
+					exits = false
 					if chgName.inp.v:find("%A") then
 						russkieBukviNahyi = true
 						isHotKeyDefined = false
@@ -6355,7 +6354,7 @@ function mainWind()
 					os.remove(dirml.."/MedicalHelper/Binder/bind-"..binder.list[binder.select_bind].name..".txt")
 				end
 				table.remove(binder.list, binder.select_bind) 
-				local f = io.open(dirml.."/MedicalHelper/bindSetting.med", "w")
+				f = io.open(dirml.."/MedicalHelper/bindSetting.med", "w")
 				f:write(encodeJson(binder.list))
 				f:flush()
 				f:close()
@@ -6363,7 +6362,7 @@ function mainWind()
 			end
 			imgui.SameLine()
 			if imgui.Button(u8"Изменить", imgui.ImVec2(152, 25)) then
-				local bool = false
+				bool = false
 				if binder.name.v ~= "" then
 					for i,v in ipairs(binder.list) do
 						if v.name == u8:decode(binder.name.v) and i ~= binder.select_bind then bool = true end
@@ -6378,15 +6377,15 @@ function mainWind()
 					rkeys.registerHotKey(binder.key, true, onHotKeyBIND)
 					binder.list[binder.select_bind].key = binder.key
 					binder.list[binder.select_bind].cmd = binder.cmd.v
-					local sec = string.format("%.1f", binder.sleep.v)
+					sec = string.format("%.1f", binder.sleep.v)
 					binder.list[binder.select_bind].sleep = sec
-					local text = u8:decode(binder.text.v)
-					local cmd = u8:decode(binder.cmd.v)
-					local saveJS = encodeJson(binder.list) 
+					text = u8:decode(binder.text.v)
+					cmd = u8:decode(binder.cmd.v)
+					saveJS = encodeJson(binder.list) 
 					sampRegCMD()
 					sampUnregisterChatCommand(unregcmd)
-					local f = io.open(dirml.."/MedicalHelper/bindSetting.med", "w")
-					local ftx = io.open(dirml.."/MedicalHelper/Binder/bind-"..binder.list[binder.select_bind].name..".txt", "w")
+					f = io.open(dirml.."/MedicalHelper/bindSetting.med", "w")
+					ftx = io.open(dirml.."/MedicalHelper/Binder/bind-"..binder.list[binder.select_bind].name..".txt", "w")
 					f:write(saveJS)
 					ftx:write(text)
 					f:flush()
@@ -6424,8 +6423,8 @@ function mainWind()
 	end
 	if select_menu[6] then
 		imgui.SameLine()
-		local text_question = { u8"Как мне быть новичком? Что мне делать?", u8"У меня нет опыта в ролевой игре. Что мне делать?", u8"В чем смысл этой игры?", u8"Как мне начать играть на сервере Arizona?", u8"Что значит ролевая игра?", u8"Как мне стать врачом?", u8"Что нужно делать и как не нарушать?", u8"Где можно посмотреть правила?", u8"Я не могу понять что-то в игре. Что делать?", u8"Я хочу узнать как создать свою семью?", u8"Как мне найти работу в городе? Что для этого нужно?", u8"Как мне заработать деньги в игре?", u8"У меня нет напарника для игры. Что делать?", u8"Как в этой игре быстро заработать деньги?", u8"Как мне разобраться в законах? Что нужно знать о них?", u8"Что делать если я попал в больницу?", u8"Как мне создать свой бизнес?", u8"Какие команды нужно знать для игры?", u8"Я слышал о некоторых командах. Что они значат?", u8"Что делать если меня арестовали и что делать?", u8"Что такое серьезная Role Play игра?"}
-			local icon_question = {fa.ICON_CUBE, fa.ICON_USER_SECRET, fa.ICON_BUG, fa.ICON_PENCIL, fa.ICON_ASTERISK,
+		text_question = { u8"Как мне быть новичком? Что мне делать?", u8"У меня нет опыта в ролевой игре. Что мне делать?", u8"В чем смысл этой игры?", u8"Как мне начать играть на сервере Arizona?", u8"Что значит ролевая игра?", u8"Как мне стать врачом?", u8"Что нужно делать и как не нарушать?", u8"Где можно посмотреть правила?", u8"Я не могу понять что-то в игре. Что делать?", u8"Я хочу узнать как создать свою семью?", u8"Как мне найти работу в городе? Что для этого нужно?", u8"Как мне заработать деньги в игре?", u8"У меня нет напарника для игры. Что делать?", u8"Как в этой игре быстро заработать деньги?", u8"Как мне разобраться в законах? Что нужно знать о них?", u8"Что делать если я попал в больницу?", u8"Как мне создать свой бизнес?", u8"Какие команды нужно знать для игры?", u8"Я слышал о некоторых командах. Что они значат?", u8"Что делать если меня арестовали и что делать?", u8"Что такое серьезная Role Play игра?"}
+			icon_question = {fa.ICON_CUBE, fa.ICON_USER_SECRET, fa.ICON_BUG, fa.ICON_PENCIL, fa.ICON_ASTERISK,
 			fa.ICON_PENCIL_SQUARE_O, fa.ICON_KEYBOARD_O, fa.ICON_SCISSORS, fa.ICON_FACEBOOK, fa.ICON_GAMEPAD,
 			fa.ICON_LINE_CHART, fa.ICON_MUSIC, fa.ICON_WRENCH, fa.ICON_USD,
 			fa.ICON_SIMPLYBUILT, fa.ICON_CUBES, fa.ICON_ARROW_UP, fa.ICON_FOLDER_OPEN, fa.ICON_CHECK_SQUARE,
@@ -6542,12 +6541,12 @@ function mainWind()
 		imgui.EndChild()
 	end
 	if select_menu[10] and not bassNOT then
-		local record = {'http://radio-srv1.11one.ru/record192k.mp3', 'http://radiorecord.hostingradio.ru/mix96.aacp', 'http://radiorecord.hostingradio.ru/party96.aacp', 'http://radiorecord.hostingradio.ru/phonk96.aacp', 'http://radiorecord.hostingradio.ru/gop96.aacp', 'http://radiorecord.hostingradio.ru/rv96.aacp', 'http://radiorecord.hostingradio.ru/dub96.aacp', 'http://radiorecord.hostingradio.ru/bighits96.aacp', 'http://radiorecord.hostingradio.ru/organic96.aacp', 'http://radiorecord.hostingradio.ru/russianhits96.aacp', 'http://radiorecord.hostingradio.ru/gold96.aacp'}
-		local action = require('moonloader').audiostream_state
+		record = {'http://radio-srv1.11one.ru/record192k.mp3', 'http://radiorecord.hostingradio.ru/mix96.aacp', 'http://radiorecord.hostingradio.ru/party96.aacp', 'http://radiorecord.hostingradio.ru/phonk96.aacp', 'http://radiorecord.hostingradio.ru/gop96.aacp', 'http://radiorecord.hostingradio.ru/rv96.aacp', 'http://radiorecord.hostingradio.ru/dub96.aacp', 'http://radiorecord.hostingradio.ru/bighits96.aacp', 'http://radiorecord.hostingradio.ru/organic96.aacp', 'http://radiorecord.hostingradio.ru/russianhits96.aacp', 'http://radiorecord.hostingradio.ru/gold96.aacp'}
+		action = require('moonloader').audiostream_state
 		imgui.SameLine()
 		if imgui.InvisibleButton(u8"##Поиск в интернете", imgui.ImVec2(227, 30)) then select_menu_music = 1 end
 		imgui.SetCursorPos(imgui.ImVec2(156, 40))
-		local p = imgui.GetCursorScreenPos()
+		p = imgui.GetCursorScreenPos()
 		if imgui.IsItemActive() and select_menu_music ~= 1 then
 			imgui.GetWindowDrawList():AddRectFilled(imgui.ImVec2(p.x, p.y), imgui.ImVec2(p.x + 228, p.y + 30), imgui.GetColorU32(imgui.ImVec4(0.10, 0.10, 0.10 ,1.00)), 10, 9)
 		elseif imgui.IsItemHovered() and select_menu_music ~= 1 then
@@ -6560,7 +6559,7 @@ function mainWind()
 		imgui.SameLine()
 		if imgui.InvisibleButton(u8"##Сохранённые", imgui.ImVec2(227, 30)) then select_menu_music = 2 end
 		imgui.SetCursorPos(imgui.ImVec2(384, 40))
-		local p = imgui.GetCursorScreenPos()
+		p = imgui.GetCursorScreenPos()
 		if imgui.IsItemActive() and select_menu_music ~= 2 then
 			imgui.GetWindowDrawList():AddRectFilled(imgui.ImVec2(p.x, p.y), imgui.ImVec2(p.x + 228, p.y + 30), imgui.GetColorU32(imgui.ImVec4(0.10, 0.10, 0.10 ,1.00)))
 		elseif imgui.IsItemHovered() and select_menu_music ~= 2 then
@@ -6573,7 +6572,7 @@ function mainWind()
 		imgui.SameLine()
 		if imgui.InvisibleButton(u8"Радио Record", imgui.ImVec2(227, 30)) then select_menu_music = 3 end
 		imgui.SetCursorPos(imgui.ImVec2(612, 40))
-		local p = imgui.GetCursorScreenPos()
+		p = imgui.GetCursorScreenPos()
 		if imgui.IsItemActive() and select_menu_music ~= 3 then
 			imgui.GetWindowDrawList():AddRectFilled(imgui.ImVec2(p.x, p.y), imgui.ImVec2(p.x + 228, p.y + 30), imgui.GetColorU32(imgui.ImVec4(0.10, 0.10, 0.10 ,1.00)), 10, 6)
 		elseif imgui.IsItemHovered() and select_menu_music ~= 3 then
@@ -6632,7 +6631,7 @@ function mainWind()
 			imgui.SetCursorPosY(40)
 			if #tracks.link > 0 and tracks.link[1] ~= "error404" then
 				for i = 1, #tracks.link do
-					local im = i
+					im = i
 					checktrack = 1
 					for hy = 1, #save_tracks.link do
 						if save_tracks.link[hy] == tracks.link[im] then
@@ -6649,7 +6648,7 @@ function mainWind()
 							table.insert(save_tracks.name, 1, tracks.name[i])
 							table.insert(save_tracks.time, 1, tracks.time[i])
 							table.insert(save_tracks.image, 1, tracks.image[i])
-							local f = io.open(dirml.."/MedicalHelper/шпаргалки.med", "w")
+							f = io.open(dirml.."/MedicalHelper/шпаргалки.med", "w")
 							f:write(encodeJson(save_tracks))
 							f:flush()
 							f:close()
@@ -6659,13 +6658,13 @@ function mainWind()
 							end
 						end
 						if checktrack == 2 then
-							local checktracknext = save_tracks.link[tracknim]
+							 checktracknext = save_tracks.link[tracknim]
 							table.remove(save_tracks.link, tracknim)
 							table.remove(save_tracks.artist, tracknim)
 							table.remove(save_tracks.name, tracknim)
 							table.remove(save_tracks.time, tracknim)
 							table.remove(save_tracks.image, tracknim)
-							local f = io.open(dirml.."/MedicalHelper/шпаргалки.med", "w")
+							f = io.open(dirml.."/MedicalHelper/шпаргалки.med", "w")
 							f:write(encodeJson(save_tracks))
 							f:flush()
 							f:close()
@@ -6718,7 +6717,7 @@ function mainWind()
 					end
 					imgui.SetCursorPosY(5 + (im * 35))
 					if imgui.Button(u8"##MusicFindTrack"..i, imgui.ImVec2(645, 30)) then
-						local menuu = {}
+						menuu = {}
 						menuu = menu_play_track
 						tracknames = tracks.artist[i].." - "..tracks.name[i]
 						tracknames_art = tracks.artist[i]
@@ -6753,7 +6752,7 @@ function mainWind()
 					imgui.SameLine()
 					imgui.SetCursorPosX(45)
 					imgui.SetCursorPosY(8 + (im * 35))
-					local textsize = "     {FFFFFF}"..tracks.artist[i].."{BDBDBD}  �  {BDBDBD}"..tracks.name[i]
+					textsize = "     {FFFFFF}"..tracks.artist[i].."{BDBDBD}  �  {BDBDBD}"..tracks.name[i]
 					if #textsize > 107 then
 						textsize = string.sub(textsize, 1, 107) .. ".."
 					end
@@ -6783,7 +6782,7 @@ function mainWind()
 			imgui.SetCursorPos(imgui.ImVec2(7, 8))
 			if #save_tracks.link > 0 then
 				for i = 1, #save_tracks.link do
-					local im = i
+					im = i
 					imgui.SetCursorPosY(13 + ((im-1) * 35))
 					if imgui.InvisibleButton(fa.ICON_PLUS..i.."n",imgui.ImVec2(25, 25)) then
 						table.remove(save_tracks.link, i)
@@ -6791,7 +6790,7 @@ function mainWind()
 						table.remove(save_tracks.name, i)
 						table.remove(save_tracks.time, i)
 						table.remove(save_tracks.image, i)
-						local f = io.open(dirml.."/MedicalHelper/шпаргалки.med", "w")
+						f = io.open(dirml.."/MedicalHelper/шпаргалки.med", "w")
 						f:write(encodeJson(save_tracks))
 						f:flush()
 						f:close()
@@ -6841,7 +6840,7 @@ function mainWind()
 					end
 					imgui.SetCursorPosY(5 + ((im-1) * 35))
 					if imgui.Button(u8"##MusicSaveTrack"..i, imgui.ImVec2(645, 30)) then
-						local menuu = {}
+						menuu = {}
 						menuu = menu_play_track
 						tracknames = save_tracks.artist[i].." - "..save_tracks.name[i]
 						tracknames_art = save_tracks.artist[i]
@@ -6877,7 +6876,7 @@ function mainWind()
 					imgui.SameLine()
 					imgui.SetCursorPosX(45)
 					imgui.SetCursorPosY(8 + ((im-1) * 35))
-					local textsize = "     {FFFFFF}"..save_tracks.artist[i].."{BDBDBD}  -  {BDBDBD}"..save_tracks.name[i]
+					textsize = "     {FFFFFF}"..save_tracks.artist[i].."{BDBDBD}  -  {BDBDBD}"..save_tracks.name[i]
 					if #textsize > 107 then
 						textsize = string.sub(textsize, 1, 107) .. ".."
 					end
@@ -6894,7 +6893,7 @@ function mainWind()
 			imgui.EndChild()
 		end
 		if select_menu_music == 3 then -- 125 138   pos -> 15 13
-			local function background_record_card(posX_R, posY_R, i_R)
+			function background_record_card(posX_R, posY_R, i_R)
 				imgui.SetCursorPos(imgui.ImVec2(posX_R, posY_R))
 				if imgui.InvisibleButton(u8"##Record RADIO"..i_R, imgui.ImVec2(125, 145)) then
 					selectis = 0
@@ -6909,7 +6908,7 @@ function mainWind()
 					end
 				end
 				imgui.SetCursorPos(imgui.ImVec2(posX_R, posY_R))
-				local p = imgui.GetCursorScreenPos()
+				p = imgui.GetCursorScreenPos()
 				if select_music ~= i_R then
 					imgui.GetWindowDrawList():AddRectFilled(imgui.ImVec2(p.x, p.y), imgui.ImVec2(p.x + 125, p.y + 143), imgui.GetColorU32(imgui.ImVec4(0.15, 0.15, 0.15 ,1.00)), 10, 15)
 				elseif select_music == i_R then
@@ -6922,7 +6921,7 @@ function mainWind()
 				end
 				imgui.SetCursorPos(imgui.ImVec2(posX_R + 16, posY_R + 2))
 				imgui.Image(imgRECORD[i_R], imgui.ImVec2(94, 94))
-				local calc = imgui.CalcTextSize(u8(record_text_name[i_R]))
+				calc = imgui.CalcTextSize(u8(record_text_name[i_R]))
 				imgui.SetCursorPos(imgui.ImVec2(posX_R + (63 - calc.x / 2 ), posY_R + 109))
 				imgui.Text(u8(record_text_name[i_R]))
 			end
@@ -6943,10 +6942,10 @@ function mainWind()
 			imgui.EndChild()
 		end
 		imgui.SetCursorPos(imgui.ImVec2(159, 400))
-		local p = imgui.GetCursorScreenPos()
+		p = imgui.GetCursorScreenPos()
 		imgui.GetWindowDrawList():AddRectFilled(imgui.ImVec2(p.x, p.y), imgui.ImVec2(p.x + 685, p.y + 55), imgui.GetColorU32(imgui.ImVec4(0.15, 0.15, 0.15 ,1.00)), 10, 15)
 		imgui.GetCursorStartPos()
-		local function convert(param)
+		function convert(param)
 			param = tonumber(param)*100
 			return round(param, 1)
 		end
@@ -7017,8 +7016,8 @@ function mainWind()
 		imgui.PopFont()
 		if status_track_pl ~= "STOP" then
 			if selectis ~= 0 and menu_play_track[1] then
-				local textsizel = "{FFFFFF}"..tracks.name[selectis]
-				local textsizela = "{BDBDBD}"..tracks.artist[selectis]
+				textsizel = "{FFFFFF}"..tracks.name[selectis]
+				textsizela = "{BDBDBD}"..tracks.artist[selectis]
 				if #textsizel > 57 then
 					textsizel = string.sub(textsizel, 1, 57) .. "..."
 				end
@@ -7036,8 +7035,8 @@ function mainWind()
 					imgui.Image(imgNoLabel, imgui.ImVec2(46, 46))
 				end
 			elseif selectis ~= 0 and menu_play_track[2] then
-				local textsizel = "{FFFFFF}"..save_tracks.name[selectis]
-				local textsizela = "{BDBDBD}"..save_tracks.artist[selectis]
+				textsizel = "{FFFFFF}"..save_tracks.name[selectis]
+				textsizela = "{BDBDBD}"..save_tracks.artist[selectis]
 				if #textsizel > 57 then
 					textsizel = string.sub(textsizel, 1, 57) .. "..."
 				end
@@ -7086,12 +7085,12 @@ function mainWind()
 			imgui.Image(imgNoLabel, imgui.ImVec2(46, 46))
 		end
 		imgui.SetCursorPos(imgui.ImVec2(325, 442))
-		local p = imgui.GetCursorScreenPos()
+		p = imgui.GetCursorScreenPos()
 		imgui.GetWindowDrawList():AddRectFilled(imgui.ImVec2(p.x, p.y), imgui.ImVec2(p.x + 400, p.y + Y_rewind), imgui.GetColorU32(imgui.ImVec4(1.00, 1.00, 1.00 ,0.50)), 10, 15)
 		imgui.SetCursorPos(imgui.ImVec2(325, 442))
-		local p = imgui.GetCursorScreenPos()
+		p = imgui.GetCursorScreenPos()
 		if get_status_potok_song() ~= 0 then --findmh
-			local function thetime()
+			function thetime()
 				if timetr[1] < 10 then
 					trt = "0"..timetr[1]
 				else
@@ -7105,7 +7104,7 @@ function mainWind()
 				return trt2..":"..trt
 			end
 			if select_music == 0 then
-				local sizeXline = (timetr[2]*60+timetr[1])*timetri
+				sizeXline = (timetr[2]*60+timetr[1])*timetri
 				if sizeXline > 400 then
 					sizeXline = 400
 				end
@@ -7214,10 +7213,10 @@ function mainWind()
 		imgui.PopStyleColor(3)
 		imgui.PopItemWidth()
 		imgui.SetCursorPos(imgui.ImVec2(760, 442))
-		local p = imgui.GetCursorScreenPos()
+		p = imgui.GetCursorScreenPos()
 		imgui.GetWindowDrawList():AddRectFilled(imgui.ImVec2(p.x, p.y), imgui.ImVec2(p.x + 75, p.y + 5), imgui.GetColorU32(imgui.ImVec4(1.00, 1.00, 1.00 ,0.50)), 10, 15)
 		imgui.SetCursorPos(imgui.ImVec2(760, 442))
-		local p = imgui.GetCursorScreenPos()
+		p = imgui.GetCursorScreenPos()
 		imgui.GetWindowDrawList():AddRectFilled(imgui.ImVec2(p.x, p.y), imgui.ImVec2(p.x + (convert(volume_music.v)/2.66), p.y + 5), imgui.GetColorU32(imgui.ImVec4(1.00, 1.00, 1.00 ,1.00)), 10, 15)
 	elseif bassNOT and select_menu[10] then
 		imgui.SetCursorPosX(155)
@@ -7225,9 +7224,9 @@ function mainWind()
 		imgui.Text(u8"Необходимая библиотека отсутствует. Установите библиотеку \"bass.lua\" \n\nСкачайте файл и поместите в папку lib для дальнейшей работы скрипта.")
 	end
 	if select_menu[9] then
-		local function TheBackground(IsItem, posX, posY, sizeX, sizeY, rounding, flag)
+		function TheBackground(IsItem, posX, posY, sizeX, sizeY, rounding, flag)
 			imgui.SetCursorPos(imgui.ImVec2(posX, posY))
-			local p = imgui.GetCursorScreenPos()
+			p = imgui.GetCursorScreenPos()
 			if IsItem == 1 then
 				imgui.GetWindowDrawList():AddRectFilled(imgui.ImVec2(p.x, p.y), imgui.ImVec2(p.x + sizeX, p.y + sizeY), imgui.GetColorU32(imgui.ImVec4(0.15, 0.15, 0.15 ,1.00)), rounding, flag)
 			elseif IsItem == 2 then
@@ -7346,7 +7345,7 @@ function mainWind()
 					cb_x1.v, cb_x2.v = false, false
 					isHotKeyExists = false
 					imgui.CloseCurrentPopup();
-					local f = io.open(dirml.."/MedicalHelper/cmdSetting.med", "w")
+					f = io.open(dirml.."/MedicalHelper/cmdSetting.med", "w")
 					f:write(encodeJson(cmdBind))
 					f:flush()
 					f:close()
@@ -7416,7 +7415,7 @@ function mainWind()
 		end
 		if select_menu[3] then
 			if imgui.Button(u8"Применить", imgui.ImVec2(174, 0)) then
-				local exits = false
+				exits = false
 				if chgName.inp.v:find("%A") then
 					russkieBukviNahyi = true
 					isHotKeyDefined = false
@@ -7462,7 +7461,7 @@ function mainWind()
 						dlinaStroki = false
 						cmdBind[selected_cmd].cmd = chgName.inp.v
 						imgui.CloseCurrentPopup();
-						local f = io.open(dirml.."/MedicalHelper/cmdSetting.med", "w")
+						f = io.open(dirml.."/MedicalHelper/cmdSetting.med", "w")
 						f:write(encodeJson(cmdBind))
 						f:flush()
 						f:close()
@@ -7475,7 +7474,7 @@ function mainWind()
 		end			
 		if select_menu[4] then
 			if imgui.Button(u8"Применить", imgui.ImVec2(174, 0)) then
-				local exits = false
+				exits = false
 				if chgName.inp.v:find("%A") then
 					russkieBukviNahyi = true
 					isHotKeyDefined = false
@@ -7556,7 +7555,7 @@ function mainWind()
 	if imgui.BeginPopupModal(u8"Ошибка", null, imgui.WindowFlags.AlwaysAutoResize + imgui.WindowFlags.NoMove) then
     imgui.Text(u8"Такое имя уже существует")
 		imgui.SetCursorPosX(60)
-		if imgui.Button(u8"��", imgui.ImVec2(120, 20)) then imgui.CloseCurrentPopup() end
+		if imgui.Button(u8"ОК", imgui.ImVec2(120, 20)) then imgui.CloseCurrentPopup() endend
 		imgui.EndPopup()
 	end	
 	imgui.PopStyleColor(1)
@@ -7571,7 +7570,7 @@ function imgui.OnDrawFrame()
 		choiceWind()
 	end
 	if ReminderWin.v then
-		local sw, sh = getScreenResolution()
+		sw, sh = getScreenResolution()
 		imgui.SetNextWindowSize(imgui.ImVec2(300, 130), imgui.Cond.FirstUseEver)
 		imgui.SetNextWindowPos(imgui.ImVec2(sw/2, sh/2), imgui.Cond.FirstUseEver, imgui.ImVec2(0.5, 0.5))
 		imgui.Begin(u8"Напоминание", mainWin, imgui.WindowFlags.NoCollapse + imgui.WindowFlags.NoResize + imgui.WindowFlags.NoTitleBar + imgui.WindowFlags.NoScrollbar + imgui.WindowFlags.NoScrollWithMouse);
@@ -7637,8 +7636,8 @@ function imgui.OnDrawFrame()
 			imgui.Begin(u8"Музыкальный плеер", musicHUD, imgui.WindowFlags.NoCollapse + imgui.WindowFlags.NoResize + imgui.WindowFlags.NoTitleBar)
 			if status_track_pl ~= "STOP" then
 				if selectis ~= 0 and menu_play_track[1] then
-					local textsizel = "{FFFFFF}"..tracks.name[selectis]
-					local textsizela = "{BDBDBD}"..tracks.artist[selectis]
+					textsizel = "{FFFFFF}"..tracks.name[selectis]
+					textsizela = "{BDBDBD}"..tracks.artist[selectis]
 					if #textsizel > 27 then
 						textsizel = string.sub(textsizel, 1, 27) .. "..."
 					end
@@ -7656,8 +7655,8 @@ function imgui.OnDrawFrame()
 						imgui.Image(imgNoLabel, imgui.ImVec2(60, 60))
 					end
 				elseif selectis ~= 0  and menu_play_track[2] then
-					local textsizel = "{FFFFFF}"..save_tracks.name[selectis]
-					local textsizela = "{BDBDBD}"..save_tracks.artist[selectis]
+					textsizel = "{FFFFFF}"..save_tracks.name[selectis]
+					textsizela = "{BDBDBD}"..save_tracks.artist[selectis]
 					if #textsizel > 27 then
 						textsizel = string.sub(textsizel, 1, 27) .. "..."
 					end
@@ -7706,12 +7705,12 @@ function imgui.OnDrawFrame()
 				imgui.Image(imgNoLabel, imgui.ImVec2(60, 60))
 			end
 			imgui.SetCursorPos(imgui.ImVec2(88, 55))
-			local p = imgui.GetCursorScreenPos()
+			p = imgui.GetCursorScreenPos()
 			imgui.GetWindowDrawList():AddRectFilled(imgui.ImVec2(p.x, p.y), imgui.ImVec2(p.x + 200, p.y + 5), imgui.GetColorU32(imgui.ImVec4(1.00, 1.00, 1.00 ,0.50)), 10, 15)
 			imgui.SetCursorPos(imgui.ImVec2(88, 55))
-			local p = imgui.GetCursorScreenPos()
+			p = imgui.GetCursorScreenPos()
 			if get_status_potok_song() ~= 0 then
-				local function thetime()
+				function thetime()
 					if timetr[1] < 10 then
 						trt = "0"..timetr[1]
 					else
@@ -7725,7 +7724,7 @@ function imgui.OnDrawFrame()
 					return trt2..":"..trt
 				end
 				if select_music == 0 then
-					local sizeXline = (timetr[2]*60+timetr[1])*(timetri/2)
+					sizeXline = (timetr[2]*60+timetr[1])*(timetri/2)
 					if sizeXline > 200 then
 						sizeXline = 200
 					end
@@ -7742,7 +7741,7 @@ function imgui.OnDrawFrame()
 			if status_track_pl == "PAUSE" or status_track_pl == "STOP" then
 				if select_music == 0 then
 					imgui.SetCursorPos(imgui.ImVec2(17, 5))
-					local p = imgui.GetCursorScreenPos()
+					p = imgui.GetCursorScreenPos()
 					imgui.GetWindowDrawList():AddRectFilled(imgui.ImVec2(p.x, p.y), imgui.ImVec2(p.x + 60, p.y + 60), imgui.GetColorU32(imgui.ImVec4(0.00, 0.00, 0.00 ,0.50)))
 					imgui.SetCursorPos(imgui.ImVec2(33, 17))
 					imgui.TextColored(imgui.ImVec4(1.0, 1.00, 1.00 ,0.85), fa.ICON_PAUSE_CIRCLE_O)
@@ -7785,22 +7784,22 @@ function imgui.OnDrawFrame()
 				end
 			end
 			imgui.SetCursorPos(imgui.ImVec2(272, 48))
-			local p = imgui.GetCursorScreenPos()
+			p = imgui.GetCursorScreenPos()
 	--[[]]	imgui.GetWindowDrawList():AddRectFilled(imgui.ImVec2(p.x, p.y), imgui.ImVec2(p.x + 3, p.y + -anim_hud_tr[1]), imgui.GetColorU32(imgui.ImVec4(1.00, 1.00, 1.00 ,0.90)))
 			
 			imgui.SetCursorPos(imgui.ImVec2(277, 48))
-			local p = imgui.GetCursorScreenPos()
+			p = imgui.GetCursorScreenPos()
 	--[[]]	imgui.GetWindowDrawList():AddRectFilled(imgui.ImVec2(p.x, p.y), imgui.ImVec2(p.x + 3, p.y + -anim_hud_tr[2]), imgui.GetColorU32(imgui.ImVec4(1.00, 1.00, 1.00 ,0.90)))
 			
 			imgui.SetCursorPos(imgui.ImVec2(282, 48))
-			local p = imgui.GetCursorScreenPos()
+			p = imgui.GetCursorScreenPos()
 	--[[]]	imgui.GetWindowDrawList():AddRectFilled(imgui.ImVec2(p.x, p.y), imgui.ImVec2(p.x + 3, p.y + -anim_hud_tr[3]), imgui.GetColorU32(imgui.ImVec4(1.00, 1.00, 1.00 ,0.90)))
 			imgui.End()
 			imgui.PopStyleColor()
 		end
     end
 	if iconwin.v then
-		local sw, sh = getScreenResolution()
+		sw, sh = getScreenResolution()
 		imgui.SetNextWindowSize(imgui.ImVec2(250, 900), imgui.Cond.FirstUseEver)
 		imgui.SetNextWindowPos(imgui.ImVec2(sw / 2, sh / 2), imgui.Cond.FirstUseEver, imgui.ImVec2(0.5, 0.5))
 		imgui.Begin("Icons ", iconwin, imgui.WindowFlags.NoCollapse + imgui.WindowFlags.NoResize);
@@ -7814,7 +7813,7 @@ function imgui.OnDrawFrame()
 end
 
 if actingOutWind.v then 
-	local function ButtonMinPl(iv, effect, parvararg)
+	function ButtonMinPl(iv, effect, parvararg)
 		if parvararg == "arg" then
 			if effect == "remove" then
 				imgui.SetCursorPos(imgui.ImVec2(15, 35 + (iv*30)))
@@ -7834,7 +7833,7 @@ if actingOutWind.v then
 						table.insert(acting_buf.arg, (#acting_buf.arg + 1), {imgui.ImInt(0), imgui.ImBuffer(u8"Аргумент "..#acting_buf.arg, 128)})
 					end
 					imgui.SetCursorPos(imgui.ImVec2(17, 32 + ((#acting_buf.arg+1)*30)))
-					local p = imgui.GetCursorScreenPos()
+					p = imgui.GetCursorScreenPos()
 					if imgui.IsItemHovered() and not imgui.IsItemActive() then
 						imgui.GetWindowDrawList():AddRectFilled(imgui.ImVec2(p.x, p.y), imgui.ImVec2(p.x + 100, p.y + 30), imgui.GetColorU32(imgui.ImVec4(0.45, 0.45, 0.45 ,1.00)), 10, 15)
 					elseif imgui.IsItemActive() then
@@ -7844,7 +7843,7 @@ if actingOutWind.v then
 					end
 				else
 					imgui.SetCursorPos(imgui.ImVec2(17, 32 + ((#acting_buf.arg+1)*30)))
-					local p = imgui.GetCursorScreenPos()
+					p = imgui.GetCursorScreenPos()
 					imgui.GetWindowDrawList():AddRectFilled(imgui.ImVec2(p.x, p.y), imgui.ImVec2(p.x + 100, p.y + 30), imgui.GetColorU32(imgui.ImVec4(0.25, 0.25, 0.25 ,1.00)), 10, 15)
 				end
 				imgui.SetCursorPos(imgui.ImVec2(35, 38 + ((#acting_buf.arg+1)*30)))
@@ -7901,7 +7900,7 @@ if actingOutWind.v then
 					else
 						imgui.SetCursorPos(imgui.ImVec2(17, 32 + ((#acting_buf.var+1)*30)))
 					end
-					local p = imgui.GetCursorScreenPos()
+					p = imgui.GetCursorScreenPos()
 					if imgui.IsItemHovered() and not imgui.IsItemActive() then
 						imgui.GetWindowDrawList():AddRectFilled(imgui.ImVec2(p.x, p.y), imgui.ImVec2(p.x + 100, p.y + 30), imgui.GetColorU32(imgui.ImVec4(0.45, 0.45, 0.45 ,1.00)), 10, 15)
 					elseif imgui.IsItemActive() then
@@ -7915,7 +7914,7 @@ if actingOutWind.v then
 					else
 						imgui.SetCursorPos(imgui.ImVec2(17, 32 + ((#acting_buf.var+1)*30)))
 					end
-					local p = imgui.GetCursorScreenPos()
+					p = imgui.GetCursorScreenPos()
 					imgui.GetWindowDrawList():AddRectFilled(imgui.ImVec2(p.x, p.y), imgui.ImVec2(p.x + 100, p.y + 30), imgui.GetColorU32(imgui.ImVec4(0.25, 0.25, 0.25 ,1.00)), 10, 15)
 				end
 				if acting_buf.argfunc.v then  
@@ -7931,7 +7930,7 @@ if actingOutWind.v then
 			end
 		end
 	end
-	local function ButtomPosition(parx, pary)
+	function ButtomPosition(parx, pary)
 		if acting_buf.argfunc.v and acting_buf.varfunc.v then
 			if #acting_buf.arg >= #acting_buf.var then
 				imgui.SetCursorPos(imgui.ImVec2(parx, pary + ((#acting_buf.typeAct + 1) * 40) + (#acting_buf.arg * 30)))
@@ -7946,14 +7945,14 @@ if actingOutWind.v then
 				imgui.SetCursorPos(imgui.ImVec2(parx, pary - 75 + ((#acting_buf.typeAct + 1) * 40)))
 		end
 	end
-	local function ButtonRemAdd()
+	function ButtonRemAdd()
 		if #acting_buf.typeAct <= 99 then
 			ButtomPosition(15, 175)
 			if imgui.InvisibleButton(u8"##NewTypeAdd", imgui.ImVec2(100, 30)) then
 				table.insert(acting_buf.typeAct, (#acting_buf.typeAct + 1), {imgui.ImInt(0), imgui.ImBuffer(u8"", 1024)})
 			end
 			ButtomPosition(15, 175)
-			local p = imgui.GetCursorScreenPos()
+			p = imgui.GetCursorScreenPos()
 			if imgui.IsItemHovered() and not imgui.IsItemActive() then
 				imgui.GetWindowDrawList():AddRectFilled(imgui.ImVec2(p.x, p.y), imgui.ImVec2(p.x + 100, p.y + 30), imgui.GetColorU32(imgui.ImVec4(0.45, 0.45, 0.45 ,1.00)), 10, 15)
 			elseif imgui.IsItemActive() then
@@ -7963,7 +7962,7 @@ if actingOutWind.v then
 			end
 		else
 			ButtomPosition(15, 175)
-			local p = imgui.GetCursorScreenPos()
+			p = imgui.GetCursorScreenPos()
 			imgui.GetWindowDrawList():AddRectFilled(imgui.ImVec2(p.x, p.y), imgui.ImVec2(p.x + 100, p.y + 30), imgui.GetColorU32(imgui.ImVec4(0.25, 0.25, 0.25 ,1.00)), 10, 15)
 		end
 		
@@ -7975,11 +7974,11 @@ if actingOutWind.v then
 			imgui.TextColored(imgui.ImVec4(1.00, 1.00, 1.00 ,0.50), u8"Напоминание")
 		end
 	end
-	local function waitvar()
-		local param = round(acting_buf.sec.v, 0.1)
+	function waitvar()
+		param = round(acting_buf.sec.v, 0.1)
 		return tostring(param)
 	end
-	local sw, sh = getScreenResolution()
+	sw, sh = getScreenResolution()
 		imgui.SetNextWindowSize(imgui.ImVec2(1100, 580), imgui.Cond.FirstUseEver)
 		imgui.SetNextWindowPos(imgui.ImVec2(sw / 2, sh / 2), imgui.Cond.FirstUseEver, imgui.ImVec2(0.5, 0.5))
 		
@@ -8014,7 +8013,7 @@ if actingOutWind.v then
 			imgui.Dummy(imgui.ImVec2(0, 1))
 			imgui.BeginChild("RedactorActingOut", imgui.ImVec2(1085, 496), false, imgui.WindowFlags.NoScrollbar)
 			imgui.SetCursorPos(imgui.ImVec2(5, 5))
-			local p = imgui.GetCursorScreenPos()
+			p = imgui.GetCursorScreenPos()
 			imgui.GetWindowDrawList():AddRectFilled(imgui.ImVec2(p.x, p.y), imgui.ImVec2(p.x + 1074, p.y + 30), imgui.GetColorU32(imgui.ImVec4(0.15, 0.15, 0.15 ,1.00)), 10, 15)
 			imgui.SetWindowFontScale(1.1)
 			imgui.SetCursorPos(imgui.ImVec2(300, 7))
@@ -8023,7 +8022,7 @@ if actingOutWind.v then
 			if ButtonSwitch(u8" Использовать переменные", acting_buf.varfunc) then end
 			if acting_buf.argfunc.v then
 				imgui.SetCursorPos(imgui.ImVec2(5, 45))
-				local p = imgui.GetCursorScreenPos()
+				p = imgui.GetCursorScreenPos()
 				if acting_buf.varfunc.v then
 					imgui.GetWindowDrawList():AddRectFilled(imgui.ImVec2(p.x, p.y), imgui.ImVec2(p.x + 532, p.y + 63 + (#acting_buf.arg*30)), imgui.GetColorU32(imgui.ImVec4(0.15, 0.15, 0.15 ,1.00)), 10, 15)
 				else
@@ -8050,7 +8049,7 @@ if actingOutWind.v then
 				else
 					imgui.SetCursorPos(imgui.ImVec2(5, 45))
 				end
-				local p = imgui.GetCursorScreenPos()
+				p = imgui.GetCursorScreenPos()
 				if acting_buf.argfunc.v then
 					imgui.GetWindowDrawList():AddRectFilled(imgui.ImVec2(p.x, p.y), imgui.ImVec2(p.x + 532, p.y + 63 + (#acting_buf.var*30)), imgui.GetColorU32(imgui.ImVec4(0.15, 0.15, 0.15 ,1.00)), 10, 15)
 				else
@@ -8075,8 +8074,8 @@ if actingOutWind.v then
 				end
 				ButtonMinPl(i, "create", "var")
 			end
-			local function GetPosField()
-				local parametrY = 0
+			function GetPosField()
+				parametrY = 0
 				if acting_buf.argfunc.v and acting_buf.varfunc.v then
 					if #acting_buf.arg >= #acting_buf.var then
 						parametrY = 74 + (#acting_buf.arg * 30)
@@ -8092,8 +8091,8 @@ if actingOutWind.v then
 				end
 				return parametrY
 			end
-			local function find_last_index(array, element)
-				local index = 0
+			function find_last_index(array, element)
+				index = 0
 				for i = 1, #array do
 					if array[i][1].v == element then
 						index = i
@@ -8102,7 +8101,7 @@ if actingOutWind.v then
 				return index
 			end
 			imgui.SetCursorPos(imgui.ImVec2(5, 44 + GetPosField()))
-			local p = imgui.GetCursorScreenPos()
+			p = imgui.GetCursorScreenPos()
 			imgui.GetWindowDrawList():AddRectFilled(imgui.ImVec2(p.x, p.y), imgui.ImVec2(p.x + 1074, p.y + 68), imgui.GetColorU32(imgui.ImVec4(0.15, 0.15, 0.15 ,1.00)), 10, 15)
 			imgui.SetCursorPos(imgui.ImVec2(16, 78 + GetPosField()))
 			imgui.PushItemWidth(150)
@@ -8116,7 +8115,7 @@ if actingOutWind.v then
 			imgui.SetCursorPos(imgui.ImVec2(68, 55 + GetPosField()))
 			imgui.Text(waitvar()..u8" сек.")
 			imgui.SetCursorPos(imgui.ImVec2(16, 86 + GetPosField()))
-			local p = imgui.GetCursorScreenPos()
+			p = imgui.GetCursorScreenPos()
 			imgui.GetWindowDrawList():AddRectFilled(imgui.ImVec2(p.x, p.y), imgui.ImVec2(p.x + 140, p.y + 5), imgui.GetColorU32(imgui.ImVec4(1.00, 1.00, 1.00 ,0.50)), 10, 15)
 			imgui.GetWindowDrawList():AddRectFilled(imgui.ImVec2(p.x, p.y), imgui.ImVec2(p.x + (acting_buf.sec.v*14), p.y + 5), imgui.GetColorU32(imgui.ImVec4(0.11, 0.60, 0.88 ,1.00)), 10, 15)
 			imgui.GetWindowDrawList():AddCircleFilled(imgui.ImVec2(p.x + (acting_buf.sec.v*14), p.y + 2), 9, imgui.GetColorU32(imgui.ImVec4(1.00, 1.00, 1.00 ,1.00)))
@@ -8127,11 +8126,11 @@ if actingOutWind.v then
 				imgui.TextColored(imgui.ImVec4(0.86, 0.18, 0.18, 1.00), u8"   Внимание! Из-за малой задержки могут появиться сообщения \"Не туда!\"")
 			end
 			imgui.SetCursorPos(imgui.ImVec2(5, 123 + GetPosField()))
-			local p = imgui.GetCursorScreenPos()
+			p = imgui.GetCursorScreenPos()
 			imgui.GetWindowDrawList():AddRectFilled(imgui.ImVec2(p.x, p.y), imgui.ImVec2(p.x + 1074, p.y + 60 + (#acting_buf.typeAct * 40)), imgui.GetColorU32(imgui.ImVec4(0.15, 0.15, 0.15 ,1.00)), 10, 15)
 			
 			for c = 1, #acting_buf.typeAct do
-				local pd = c
+				pd = c
 				if acting_buf.argfunc.v and acting_buf.varfunc.v then
 					if #acting_buf.arg >= #acting_buf.var and acting_buf.argfunc.v then
 						imgui.SetCursorPos(imgui.ImVec2(15, 175 + (pd * 40) + (#acting_buf.arg * 30)))
