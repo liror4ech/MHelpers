@@ -321,7 +321,7 @@ else
 	bass.BASS_Start()
 	bassNOT = false
 end
-encoding.default = "CP1251"
+encoding.default = "UTF-8"
 local u8 = encoding.UTF8
 local dlstatus = require("moonloader").download_status
 local shell32 = ffi.load 'Shell32'
@@ -10082,7 +10082,7 @@ function sobesRP(id)
 	end
 	-- fallback (если вдруг не сработал ни один id)
 	sobes.isRunning = false
-end
+
 
 function HideDialogInTh(bool)
 	repeat wait(0) until sampIsDialogActive()
@@ -11230,42 +11230,6 @@ function funCMD.doUpdate()
         end
     end)
 end
-
-local erTx =  
-[[
-{FFFFFF}������, ���-�� ������ ���������� ����������.
-��� ����� ���� ��� ���������, ��� � ����-�������, ������� ��������� ����������.
-���� � ��� �������� ���������, ����������� ����-�������, �� ������ ���-�� ������
-��������� ����������. ������� ����� ����� ������� ���� ��������.
-
-����������, �������� ����������� ������ ������� ���������.
-������ ����� ����� ������� �� ������:
-{A1DF6B}vk.com/arizonamh{FFFFFF}
-�������� lua ���� � ����������� � ������� � ����� moonloader.
-
-������ �� ������ ��������� ��� ����������� �������������.
-]]
-	sampAddChatMessage("{FF8FA2}[MH]{FFFFFF} ������������ ���������� ����� ������ �������...", 0xFF8FA2)
-	local dir = dirml.."/MedicalHelper.lua"
-	local url = urlupd
-	downloadUrlToFile(url, dir, function(id, status, p1, p2)
-		if status == dlstatus.STATUSEX_ENDDOWNLOAD then
-			if updates == nil then 
-				print("{FF0000}������ ��� ������� ������� ����.") 
-				addOneOffSound(0, 0, 0, 1058)
-				sampAddChatMessage("{FF8FA2}[MH]{FFFFFF} ��������� ������ ��� ���������� ����������. ������, ���������� ���-�� ������.", 0xFF8FA2)
-				sampShowDialog(2001, "{FF0000}������ ����������", erTx, "�������", "", 0)
-				setClipboardText("vk.com/arizonamh")
-				updWin.v = false
-			end
-		end
-		if status == dlstatus.STATUS_ENDDOWNLOADDATA then
-			updates = true
-			sampAddChatMessage("{FF8FA2}[MH]{FFFFFF} ���������� ������� ���������! ������������ �������...", 0xFF8FA2)
-			reloadScripts()
-			showCursor(false)
-		end
-	end)
 
 function funCMD.updateCheck()
 	sampAddChatMessage("{FF8FA2}[MH]{FFFFFF} Поиск обновлений...", 0xFF8FA2)
