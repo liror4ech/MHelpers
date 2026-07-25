@@ -2900,13 +2900,13 @@ if doesDirectoryExist(dirml.."/MedicalHelper/госновости/") then
 	getGovFile()
 end
 	local function check_table(arg, table, mode)
-		if mode == 1 then -- ����� �� �����
+		if mode == 1 then
 			for k, v in pairs(table) do
 				if k == arg then
 					return true
 				end
 			end
-		else -- ����� �� ��������
+		else
 			for k, v in pairs(table) do
 				if v == arg then
 					return true
@@ -3413,7 +3413,7 @@ end
 		buf_rec.v = "30000"
 		buf_ant.v = "25000"
 		num_theme.v = 0
-		buf_time.v = u8"/me посмотрел на часы и пробормотал \"Made in China\""
+		buf_time.v = u8"/me посмотрел на часы и пробормотал \"Много времени...\""
 		buf_rac.v = u8"/me поднял руки вверх, что-то шепчет и улыбается"	
 	end
 	print("{82E28C}Загрузка данных о командах...")
@@ -3651,7 +3651,7 @@ end
 
 function rendering_func()
 	local X, Y = C_membScr.pos.x.v, C_membScr.pos.y.v
-	local title = string.format('%s | ������: %s%s', org.name, org.online, (C_membScr.afk.v and (' (%s � ���)'):format(org.afk) or ''))
+	local title = string.format('%s | Онлайн: %s%s', org.name, org.online, (C_membScr.afk.v and (' (%s в АФК)'):format(org.afk) or ''))
 	local col_title = changeColorAlpha(C_membScr.color.col_title, C_membScr.font.visible.v)
 	if C_membScr.vergor.v then
 		if renderFontDrawClickableText(script_cursor, fontes, title, X, Y - C_membScr.font.distance.v - 5, col_title, col_title, 4, false) then
@@ -3662,7 +3662,7 @@ function rendering_func()
 			sampSendChat('/members')
 		end
 	end
-	if org.name == '���������' then
+	if org.name == 'Вы не состоите в организации' then
 		if C_membScr.vergor.v then
 		renderFontDrawClickableText(script_cursor, fontes, 'Вы не состоите в организации', X, Y, 0xAAFFFFFF, 0xAAFFFFFF,  4, false)
 		else
@@ -3906,9 +3906,9 @@ function styleAnimationClose(idWin, xWin, yWin)
 		end
 		animka_main.posY = posWinClosed.y + (yWin/2)
 		if posWinClosed.x > 0 then
-			animka_main.posX = posWinClosed.x + (xWin/2)
+			animka_main.posX = xWin/2
 		else
-			animka_main.posX = swx + (xWin/2)
+			animka_main.posX = xWin/2
 		end
 		lua_thread.create(function()
 			animka_main.MoveAnim = true
@@ -3930,7 +3930,7 @@ function styleAnimationClose(idWin, xWin, yWin)
 		if posWinClosed.x > 0 then
 			animka_dep.posX = posWinClosed.x + (xWin/2)
 		else
-			animka_main.posX = swx + (xWin/2)
+			animka_main.posX = xWin/2
 		end
 		lua_thread.create(function()
 			animka_dep.MoveAnim = true
@@ -3952,7 +3952,7 @@ function styleAnimationClose(idWin, xWin, yWin)
 		if posWinClosed.x > 0 then
 			animka_sob.posX = posWinClosed.x + (xWin/2)
 		else
-		    animka_main.posX = swx + (xWin/2)
+		    animka_main.posX = xWin/2
 		end
 		lua_thread.create(function()
 			animka_sob.MoveAnim = true
@@ -3974,7 +3974,7 @@ function styleAnimationClose(idWin, xWin, yWin)
 		if posWinClosed.x > 0 then
 			animka_upd.posX = posWinClosed.x + (xWin/2)
 		else
-		    animka_main.posX = swx + (xWin/2)
+		    animka_main.posX = xWin/2
 		end
 		lua_thread.create(function()
 			animka_upd.MoveAnim = true
@@ -3996,7 +3996,7 @@ function styleAnimationClose(idWin, xWin, yWin)
 		if posWinClosed.x > 0 then
 			animka_big.posX = posWinClosed.x + (xWin/2)
 		else
-		    animka_main.posX = swx + (xWin/2)
+		    animka_main.posX = xWin/2
 		end
 		lua_thread.create(function()
 			animka_big.MoveAnim = true
@@ -8623,7 +8623,7 @@ if actingOutWind.v then
 							name = u8:decode(spur.name.v)
 							if doesFileExist(dirml.."/MedicalHelper/шпаргалки/"..name..".txt") and spur.list[spur.select_spur] ~= name then
 								bool = true
-								imgui.OpenPopup(u8"������")
+								imgui.OpenPopup(u8"Ошибка")
 							else
 								os.remove(dirml.."/MedicalHelper/шпаргалки/"..spur.list[spur.select_spur]..".txt")
 								spur.list[spur.select_spur] = u8:decode(spur.name.v)
@@ -11774,27 +11774,6 @@ function EXPORTS.sendRequest()
     end
     return false
 end
-
-otchotTx = [[
-		Все отчеты нужно выкладывать на форуме {5CE9B5}forum.arizona-rp.com{FFFFFF}, там же можно найти 
-		примеры готовых отчетов, которые можно использовать, ничего не придумывая. 
-		Используйте поиск по слову {5CE9B5}'Статистика медицинской'{FFFFFF}, затем выберите {5CE9B5}'Мед. статистика'{FFFFFF}. 
-		Там есть 3 готовых шаблона, скачайте их, и потом не придется ничего делать. 
-		В конце, обязательно оформите по шаблону {5CE9B5}'Отчет о работе'{FFFFFF}. Это очень просто, 
-		как видите. Затем сохраните данные в файл и в конце месяца отправьте. 
-		Только так можно получить заработок за месяц. Не забудьте сдать отчеты 
-		вовремя и в нужный отдел. Помните, что {F75647}заполнять{FFFFFF} нужно только в нужный отдел,
-		а не куда попало. Иногда данные могут быть неверно интерпретированы, 
-		если сдать не в тот отдел.
-			Что касается тебя, чтобы {F75647}получить оплату за отчеты, не забывай о сроках. 
-		То есть, нужно сдать отчеты, и тогда в конце месяца тебе начислят деньги. 
-		Отчеты отправляются в специальную тему. Я постоянно это делаю и в этом нет проблем. 
-			Например: {5CE9B5}Скрипт - [Подробно]{FFFFFF}, и так далее. Как видишь, все просто. 
-			{F75647}																	Внимание!
-	Если ты не сдашь вовремя отчёты, то не получишь зарплату, так что не рискуй. 
-	Заполняй аккуратно, если не уверен, то лучше перепроверь, 
-	проконсультируйся с руководством. Не ленись!
-]]
 
 remove = [[
 {FFFFFF}Для полного удаления скрипта введите команду:
