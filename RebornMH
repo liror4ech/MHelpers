@@ -1135,16 +1135,6 @@ helpd.key = {
 	{k = "OEM_102", n = '> <'}
 }
 
-local sobes = {
-	input = imgui.ImBuffer(256),
-	player = {name = "", let = 0, zak = 0, work = "", bl = "", heal = "", narko = 0.1},
-	selID = imgui.ImBuffer(4),
-	logChat = {},
-	nextQ = false,
-	num = 0,
-	isRunning = false
-}
-
 local vactimer = {59, 1}
 local vaccine_two = false
 local vaccine_id
@@ -2887,7 +2877,7 @@ function main()
 	sound_reminder = lua_thread.create(function() return end)
 	lua_thread.create(function()
    		repeat wait(100) until sampIsLocalPlayerSpawned()
-    	funCMD.updateCheck()
+    	--funCMD.updateCheck()
 	end)
 
 if not doesDirectoryExist(dirml.."/MedicalHelper/files/") then
@@ -5683,37 +5673,36 @@ function mainWind()
 		imgui.SameLine()
 		imgui.BeginGroup()
 		imgui.BeginChild("cmd list", imgui.ImVec2(0, 360), false)
+	end
 		
-		for i = 1, #cmdBind do
-			if i ~= selected_cmd and cmdBind[i].rank <= num_rank.v+1 and cmdBind[i].rank ~= 1.5 then
-				imgui.PushStyleColor(imgui.Col.ButtonActive, imgui.ImColor(255, 255, 255, 7):GetVec4())
-				imgui.PushStyleColor(imgui.Col.ButtonHovered, imgui.ImColor(255, 255, 255, 15):GetVec4())
-				imgui.PushStyleColor(imgui.Col.Button, imgui.ImColor(255, 255, 255, 8):GetVec4())
-			else
-			if cmdBind[i].rank <= num_rank.v+1 and cmdBind[i].rank ~= 1.5 then
-				imgui.PushStyleColor(imgui.Col.ButtonActive, imgui.ImColor(255, 255, 255, 26):GetVec4())
-				imgui.PushStyleColor(imgui.Col.ButtonHovered, imgui.ImColor(255, 255, 255, 33):GetVec4())
-				imgui.PushStyleColor(imgui.Col.Button, imgui.ImColor(255, 255, 255, 28):GetVec4())
-			end
-			if (i ~= selected_cmd and cmdBind[i].rank > num_rank.v+1) or (cmdBind[i].rank == 1.5 and i ~= selected_cmd) then
-				imgui.PushStyleColor(imgui.Col.ButtonActive, imgui.ImColor(255, 255, 255, 5):GetVec4())
-				imgui.PushStyleColor(imgui.Col.ButtonHovered, imgui.ImColor(255, 255, 255, 12):GetVec4())
-				imgui.PushStyleColor(imgui.Col.Button, imgui.ImColor(255, 255, 255, 6):GetVec4())
-			else
-			if (i == selected_cmd and cmdBind[i].rank > num_rank.v+1) or (cmdBind[i].rank == 1.5 and i == selected_cmd) then
-				imgui.PushStyleColor(imgui.Col.ButtonActive, imgui.ImColor(255, 255, 255, 13):GetVec4())
-				imgui.PushStyleColor(imgui.Col.ButtonHovered, imgui.ImColor(255, 255, 255, 20):GetVec4())
-				imgui.PushStyleColor(imgui.Col.Button, imgui.ImColor(255, 255, 255, 15):GetVec4())
-			end
-			if imgui.Button(u8"##cmdB"..i, imgui.ImVec2(665, 30)) then
-				selected_cmd = i
-			end
-			imgui.PopStyleColor(3)
-		end
-		
+	for i = 1, #cmdBind do
+   		local is_selected = (i == selected_cmd)
+    	local has_access = (cmdBind[i].rank <= num_rank.v+1)
+    	local is_special = (cmdBind[i].rank == 1.5)
+    	if is_selected and has_access and not is_special then
+    	    imgui.PushStyleColor(imgui.Col.ButtonActive, imgui.ImColor(255,255,255,26):GetVec4())
+        	imgui.PushStyleColor(imgui.Col.ButtonHovered, imgui.ImColor(255,255,255,33):GetVec4())
+        	imgui.PushStyleColor(imgui.Col.Button, imgui.ImColor(255,255,255,28):GetVec4())
+    	elseif not is_selected and has_access and not is_special then
+        	imgui.PushStyleColor(imgui.Col.ButtonActive, imgui.ImColor(255,255,255,7):GetVec4())
+        	imgui.PushStyleColor(imgui.Col.ButtonHovered, imgui.ImColor(255,255,255,15):GetVec4())
+        	imgui.PushStyleColor(imgui.Col.Button, imgui.ImColor(255,255,255,8):GetVec4())
+    	elseif is_special and is_selected then
+        	imgui.PushStyleColor(imgui.Col.ButtonActive, imgui.ImColor(255,255,255,13):GetVec4())
+        	imgui.PushStyleColor(imgui.Col.ButtonHovered, imgui.ImColor(255,255,255,20):GetVec4())
+        	imgui.PushStyleColor(imgui.Col.Button, imgui.ImColor(255,255,255,15):GetVec4())
+    	else
+    	    imgui.PushStyleColor(imgui.Col.ButtonActive, imgui.ImColor(255,255,255,5):GetVec4())
+        	imgui.PushStyleColor(imgui.Col.ButtonHovered, imgui.ImColor(255,255,255,12):GetVec4())
+        	imgui.PushStyleColor(imgui.Col.Button, imgui.ImColor(255,255,255,6):GetVec4())
+    	end
+	end
+    if imgui.Button(u8"##cmdB"..i, imgui.ImVec2(665, 30)) then
+        selected_cmd = i
+    end
+    imgui.PopStyleColor(3)
 		for i = 1, #cmdBind do
 			imgui.SetCursorPos(imgui.ImVec2(18, -28 + (i*34)))
-			-- доступна ли команда по рангу?
 			if i ~= selected_cmd and cmdBind[i].rank <= num_rank.v+1 and cmdBind[i].rank ~= 1.5 then
 				imgui.TextColoredRGB("/"..cmdBind[i].cmd.."  {858585}-  "..cmdBind[i].desc)
 			else
@@ -7281,7 +7270,6 @@ function mainWind()
 			sampAddChatMessage("{FF8FA2}[MH]{FFFFFF} Готово! Для полного удаления введите команду {77DF63}/mh-delete.", 0xFF8FA2)
 			mainWin.v = false
 		end
-
 	if select_menu[7] then
 		profitmoney()
 	end
@@ -7555,7 +7543,7 @@ function mainWind()
 	if imgui.BeginPopupModal(u8"Ошибка", null, imgui.WindowFlags.AlwaysAutoResize + imgui.WindowFlags.NoMove) then
     imgui.Text(u8"Такое имя уже существует")
 		imgui.SetCursorPosX(60)
-		if imgui.Button(u8"ОК", imgui.ImVec2(120, 20)) then imgui.CloseCurrentPopup() endend
+		if imgui.Button(u8"ОК", imgui.ImVec2(120, 20)) then imgui.CloseCurrentPopup() end
 		imgui.EndPopup()
 	end	
 	imgui.PopStyleColor(1)
@@ -8635,7 +8623,7 @@ if actingOutWind.v then
 							name = u8:decode(spur.name.v)
 							if doesFileExist(dirml.."/MedicalHelper/шпаргалки/"..name..".txt") and spur.list[spur.select_spur] ~= name then
 								bool = true
-								imgui.OpenPopup(u8"������")
+								imgui.OpenPopup(u8"Ошибка")
 							else
 								os.remove(dirml.."/MedicalHelper/шпаргалки/"..spur.list[spur.select_spur]..".txt")
 								spur.list[spur.select_spur] = u8:decode(spur.name.v)
@@ -8741,49 +8729,45 @@ if actingOutWind.v then
 		imgui.End()
 	end
 
-	if sobWin.v then
-		sobWind()
-	end
-
 	if depWin.v then
 		inDepWin()
 	end
 
-	if updWin.v then
-    if not animka_upd.MoveAnim then seelU = imgui.Cond.FirstUseEver else seelU = imgui.Cond.Always end
-    local sw, sh = getScreenResolution()
-    imgui.SetNextWindowSize(imgui.ImVec2(700, 420), seelU)
-    imgui.SetNextWindowPos(imgui.ImVec2(animka_upd.posX, animka_upd.posY), seelU, imgui.ImVec2(0.5, 0.5))
-    imgui.Begin(fa.ICON_DOWNLOAD .. u8"  Проверка обновлений.", updWin, imgui.WindowFlags.NoCollapse + imgui.WindowFlags.NoResize + imgui.WindowFlags.NoTitleBar)
-    -- ... заголовок и кнопка закрытия ...
-    if update_available then
-        imgui.SetCursorPosX(120)
-        imgui.TextColored(imgui.ImColor(255, 200, 0, 225):GetVec4(), fa.ICON_EXCLAMATION_TRIANGLE); imgui.SameLine()
-        imgui.TextColoredRGB("Доступна новая версия: {72F566}"..newversion)
-        imgui.SetCursorPosX(282)
-        imgui.TextColoredRGB("{F8A436}Список изменений:")
-        imgui.Spacing()
-        imgui.BeginChild("update log", imgui.ImVec2(0, 230), true)
-        if updinfo then
-            for line in updinfo:gmatch("[^\n]+") do
-                imgui.TextColoredRGB(line)
-            end
-        else
-            imgui.Text("Информация не загружена.")
-        end
-        imgui.EndChild()
-        imgui.SetCursorPosX(192)
-        if imgui.Button(fa.ICON_DOWNLOAD .. u8"  Обновить", imgui.ImVec2(270, 30)) then
-            funCMD.doUpdate()
-        end
-    else
-        imgui.SetCursorPosX(120)
-        imgui.TextColored(imgui.ImColor(0, 255, 0, 225):GetVec4(), fa.ICON_CHECK); imgui.SameLine()
-        imgui.TextColoredRGB("У вас последняя версия ({72F566}"..scr.version..")")
-    end
-    imgui.End()
-end
-	if profbWin.v then
+		if updWin.v then
+    	if not animka_upd.MoveAnim then seelU = imgui.Cond.FirstUseEver else seelU = imgui.Cond.Always end
+    	local sw, sh = getScreenResolution()
+    	imgui.SetNextWindowSize(imgui.ImVec2(700, 420), seelU)
+    	imgui.SetNextWindowPos(imgui.ImVec2(animka_upd.posX, animka_upd.posY), seelU, imgui.ImVec2(0.5, 0.5))
+    	imgui.Begin(fa.ICON_DOWNLOAD .. u8"  Проверка обновлений.", updWin, imgui.WindowFlags.NoCollapse + imgui.WindowFlags.NoResize + imgui.WindowFlags.NoTitleBar)
+    	-- ... заголовок и кнопка закрытия ...
+    	if update_available then
+     	   imgui.SetCursorPosX(120)
+     	   imgui.TextColored(imgui.ImColor(255, 200, 0, 225):GetVec4(), fa.ICON_EXCLAMATION_TRIANGLE); imgui.SameLine()
+     	   imgui.TextColoredRGB("Доступна новая версия: {72F566}"..newversion)
+     	   imgui.SetCursorPosX(282)
+     	   imgui.TextColoredRGB("{F8A436}Список изменений:")
+      	  imgui.Spacing()
+      	  imgui.BeginChild("update log", imgui.ImVec2(0, 230), true)
+      	  if updinfo then
+      	      for line in updinfo:gmatch("[^\n]+") do
+       	         imgui.TextColoredRGB(line)
+       	    end
+      	  	else
+       	    	imgui.Text("Информация не загружена.")
+        	end
+        	imgui.EndChild()
+        	imgui.SetCursorPosX(192)
+        	if imgui.Button(fa.ICON_DOWNLOAD .. u8"  Обновить", imgui.ImVec2(270, 30)) then
+        	    funCMD.doUpdate()
+        	end
+    	else
+        	imgui.SetCursorPosX(120)
+        	imgui.TextColored(imgui.ImColor(0, 255, 0, 225):GetVec4(), fa.ICON_CHECK); imgui.SameLine()
+        	imgui.TextColoredRGB("У вас последняя версия ({72F566}"..scr.version..")")
+    	end
+    	imgui.End()
+	end
+		if profbWin.v then
 		profbWind()
 	end
 end
@@ -8802,9 +8786,6 @@ function funcTargetDo(idTarget) --geter
 		funCMD.recep(tostring(targetID))
 	elseif idTarget == 6 then
 		funCMD.expel(tostring(targetID).." причина")
-	elseif idTarget == 7 then
-		funCMD.sob()
-		sobes.selID.v = ""..targetID..""
 	elseif idTarget == 8 then
 		sampSetChatInputEnabled(true)
 		sampSetChatInputText("/"..cmdBind[18].cmd.." "..targetID.." ")
@@ -8990,299 +8971,7 @@ local sw, sh = getScreenResolution()
 			
 		imgui.End()
 end
-function sobWind()
-	if not animka_sob.MoveAnim then
-		seelS = imgui.Cond.FirstUseEver
-	else
-		seelS = imgui.Cond.Always
-	end
-local sw, sh = getScreenResolution()
-		imgui.SetNextWindowSize(imgui.ImVec2(910, 400), seelS)
-		imgui.SetNextWindowPos(imgui.ImVec2(animka_sob.posX, animka_sob.posY), seelS, imgui.ImVec2(0.5, 0.5))
-		imgui.Begin(u8"Окно для проведения собеседования", sobWin, imgui.WindowFlags.NoCollapse + imgui.WindowFlags.NoResize + imgui.WindowFlags.NoTitleBar);
-		imgui.SetCursorPosX(420)
-			imgui.PushFont(fontsize)
-			imgui.SetCursorPosY(6)
-			imgui.Text(u8"Окно собеседования")
-			imgui.PopFont()
-			imgui.SameLine()
-			imgui.SetCursorPosX(880)
-			imgui.SetCursorPosY(6)
-			if imgui.InvisibleButton(u8" ", imgui.ImVec2(24, 24)) or animka_sob.paramOff then 
-				posWinClosed = imgui.GetWindowPos()
-				styleAnimationClose(3, 910, 400)
-				animka_sob.paramOff = false
-			end
-			if imgui.IsItemHovered() then
-				imgui.SameLine()
-				imgui.SetCursorPosX(885)
-				imgui.SetCursorPosY(3)
-				imgui.PushFont(fa_font2)
-				imgui.TextColored(imgui.ImVec4(1.0, 0.56, 0.64 ,1.00), fa.ICON_TIMES)
-				imgui.PopFont()
-			else
-				imgui.SameLine()
-				imgui.SetCursorPosX(885)
-				imgui.SetCursorPosY(3)
-				imgui.PushFont(fa_font2)
-				imgui.Text(fa.ICON_TIMES)
-				imgui.PopFont()
-			end
-			imgui.Separator()
-			imgui.Dummy(imgui.ImVec2(0, 1))
-			imgui.BeginGroup()
-				imgui.PushItemWidth(140)
-				imgui.InputText("##id", sobes.selID, imgui.InputTextFlags.CallbackCharFilter + imgui.InputTextFlags.EnterReturnsTrue + readID(), filter(1, "%d+"))
-				imgui.PopItemWidth()
-				if not imgui.IsItemActive() and sobes.selID.v == "" then
-					imgui.SameLine()
-					imgui.SetCursorPosX(13)
-					imgui.TextDisabled(u8"Введите id игрока") 
-				end
-				imgui.SameLine()
-				imgui.SetCursorPosX(155)
-				if imgui.Button(u8"Выбрать", imgui.ImVec2(60, 25)) then
-					if sobes.selID.v ~= "" then
-						if #sobes.logChat == 0 then
-						sobes.num = sobes.num + 1
-						threadS = lua_thread.create(sobesRP, sobes.num);
-						table.insert(sobes.logChat, "{FFC000}Модератор: {FFFFFF}Начинаем собеседование...")
-						else
-						table.insert(sobes.logChat, "{E74E28}[Ошибка]{FFFFFF}: Собеседование уже идёт. Если хотите начать новое, нажмите \"Сброс\" или \n\tперезапустите скрипт.")
-						end
-					else
-						sampAddChatMessage("{FF8FA2}[MH]{FFFFFF} Укажите id игрока для начала собеседования.", 0xFF8FA2)
-					end
-				end
-				imgui.BeginChild("pass player", imgui.ImVec2(210, 170), true)
-					imgui.SetCursorPosX(30)
-					imgui.Text(u8"Информация об игроке:")
-					imgui.Separator()
-					imgui.Bullet()
-					imgui.Text(u8"Имя:")
-						if sobes.player.name == "" then
-							imgui.SameLine()
-							imgui.TextColoredRGB("{F55534}Нет")
-						else
-							imgui.SameLine()
-							imgui.TextColoredRGB("{FFCD00}"..sobes.player.name)
-						end
-					imgui.Bullet()
-					imgui.Text(u8"Возраст:")
-						if sobes.player.let == 0 then
-							imgui.SameLine()
-							imgui.TextColoredRGB("{F55534}Нет")
-						else
-							if sobes.player.let >= 3 then
-								imgui.SameLine()
-								imgui.TextColoredRGB("{17E11D}"..sobes.player.let.."/3")
-							else
-								imgui.SameLine()
-								imgui.TextColoredRGB("{F55534}"..sobes.player.let.."{17E11D}/3")
-							end
-						end
-					imgui.Bullet()
-					imgui.Text(u8"Закрепление:")
-						if sobes.player.zak == 0 then
-							imgui.SameLine()
-							imgui.TextColoredRGB("{F55534}Нет")
-						else
-							if sobes.player.zak >= 35 then
-								imgui.SameLine()
-								imgui.TextColoredRGB("{17E11D}"..sobes.player.zak.."/35")
-							else
-								imgui.SameLine()
-								imgui.TextColoredRGB("{F55534}"..sobes.player.zak.."{17E11D}/35")
-							end
-						end
-					imgui.Bullet()
-					imgui.Text(u8"Место работы:")
-						if sobes.player.work == "" then
-							imgui.SameLine()
-							imgui.TextColoredRGB("{F55534}Нет")
-						else
-							if sobes.player.work == "Нет работы" then
-								imgui.SameLine()
-								imgui.TextColoredRGB("{17E11D}"..sobes.player.work)
-							else
-								imgui.SameLine()
-								imgui.TextColoredRGB("{F55534}"..sobes.player.work)
-							end
-						end
-					imgui.Bullet()
-					imgui.Text(u8"Блоклист:")
-						if sobes.player.bl == "" then
-							imgui.SameLine()
-							imgui.TextColoredRGB("{F55534}Нет")
-						else
-							if sobes.player.bl == "Не в блоке(а)" then
-								imgui.SameLine()
-								imgui.TextColoredRGB("{17E11D}"..sobes.player.bl)
-							else
-								imgui.SameLine()
-								imgui.TextColoredRGB("{F55534}"..sobes.player.bl)
-							end
-						end
-					imgui.Spacing()
-					imgui.Bullet()
-					imgui.Text(u8"Лечение:")
-						if sobes.player.heal == "" then
-							imgui.SameLine()
-							imgui.TextColoredRGB("{F55534}Нет")
-						else
-							if sobes.player.heal == "Лечение" then
-								imgui.SameLine()
-								imgui.TextColoredRGB("{17E11D}"..sobes.player.heal)
-							else
-								imgui.SameLine()
-								imgui.TextColoredRGB("{F55534}"..sobes.player.heal)
-							end
-						end
-					imgui.Bullet()
-					imgui.Text(u8"Наркозависимость:")
-						if sobes.player.narko == 0.1 then
-							imgui.SameLine()
-							imgui.TextColoredRGB("{F55534}Нет")
-						else
-							if sobes.player.narko == 0 then
-								imgui.SameLine()
-								imgui.TextColoredRGB("{17E11D}"..sobes.player.narko.."/5")
-							else
-								imgui.SameLine()
-								imgui.TextColoredRGB("{F55534}"..sobes.player.narko.."{17E11D}/5")
-							end
-						end
-				imgui.EndChild()
-				if imgui.Button(u8"Быстрые вопросы", imgui.ImVec2(210, 30)) then imgui.OpenPopup("sobQN") end
-				imgui.Spacing()
-					if sobes.nextQ then
-						if imgui.Button(u8"Далее", imgui.ImVec2(210, 30)) then
-							sobes.num = sobes.num + 1
-							lua_thread.create(sobesRP, sobes.num); 
-						end
-					else
-						imgui.PushStyleColor(imgui.Col.Button, imgui.ImColor(156, 156, 156, 200):GetVec4())
-						imgui.PushStyleColor(imgui.Col.ButtonHovered, imgui.ImColor(156, 156, 156, 200):GetVec4())
-						imgui.PushStyleColor(imgui.Col.ButtonActive, imgui.ImColor(156, 156, 156, 200):GetVec4())
-						imgui.Button(u8"Продолжить", imgui.ImVec2(210, 30))
-						imgui.PopStyleColor(3)
-					end
-				imgui.Spacing()
-				if #sobes.logChat ~= 0 and sobes.selID.v ~= "" then
-					if imgui.Button(u8"Готовые ответы", imgui.ImVec2(210, 30)) then imgui.OpenPopup("sobEnter") end
-				else
-						imgui.PushStyleColor(imgui.Col.Button, imgui.ImColor(156, 156, 156, 200):GetVec4())
-						imgui.PushStyleColor(imgui.Col.ButtonHovered, imgui.ImColor(156, 156, 156, 200):GetVec4())
-						imgui.PushStyleColor(imgui.Col.ButtonActive, imgui.ImColor(156, 156, 156, 200):GetVec4())
-						imgui.Button(u8"Готовые ответы", imgui.ImVec2(210, 30))
-						imgui.PopStyleColor(3)
-				end
-				imgui.Spacing()
-				if #sobes.logChat ~= 0 and sobes.selID.v ~= "" then 
-					if imgui.Button(u8"Сброс / Закрыть", imgui.ImVec2(210, 30)) then
-						threadS:terminate()
-						sobes.input.v = ""
-						sobes.player = {name = "", let = 0, zak = 0, work = "", bl = "", heal = "", narko = 0.1}
-						sobes.selID.v = ""
-						sobes.logChat = {}
-						sobes.nextQ = false
-						sobes.num = 0
-					end
-				else
-						imgui.PushStyleColor(imgui.Col.Button, imgui.ImColor(156, 156, 156, 200):GetVec4())
-						imgui.PushStyleColor(imgui.Col.ButtonHovered, imgui.ImColor(156, 156, 156, 200):GetVec4())
-						imgui.PushStyleColor(imgui.Col.ButtonActive, imgui.ImColor(156, 156, 156, 200):GetVec4())
-						imgui.Button(u8"Сброс / Закрыть", imgui.ImVec2(210, 30))
-						imgui.PopStyleColor(3)
-				end
-			imgui.EndGroup()
-			imgui.SameLine()
-			imgui.BeginChild("log chat", imgui.ImVec2(0, 0), true)
-				imgui.SetCursorPosX(300)
-				imgui.Text(u8"Исторя чата")
-					if imgui.IsItemHovered() then imgui.SetTooltip(u8"Нажмите ПКМ для очистки") end
-					if imgui.IsItemClicked(1) then sobes.logChat = {} end
-				imgui.SameLine()
-				imgui.SetCursorPosX(610)
-				if imgui.SmallButton(u8"Помощь") then imgui.OpenPopup("helpsob") end
-				imgui.PushStyleColor(imgui.Col.PopupBg, imgui.ImVec4(0.06, 0.06, 0.06, 0.94))
-					if imgui.BeginPopup("helpsob") then
-						imgui.Text(u8"Краткая информация по собеседованию.")
-						imgui.TextColoredRGB(helpsob)
-					imgui.EndPopup()
-					end
-				imgui.PopStyleColor(1)
-				imgui.BeginChild("log chat in", imgui.ImVec2(0, 280), true)
-					for i,v in ipairs(sobes.logChat) do
-						imgui.TextColoredRGB(v)
-					end
-					imgui.SetScrollY(imgui.GetScrollMaxY())
-				imgui.EndChild()
-				imgui.Spacing()
-				imgui.Text(u8"Вы:");
-				imgui.SameLine()
-				imgui.PushItemWidth(545)
-				imgui.InputText("##chat", sobes.input)
-				imgui.PopItemWidth()
-				imgui.SameLine()
-				if imgui.Button(u8"Отправить", imgui.ImVec2(85, 21)) then sampSendChat(u8:decode(sobes.input.v)); sobes.input.v = "" end
-			imgui.EndChild()
-				imgui.PushStyleColor(imgui.Col.PopupBg, imgui.ImVec4(0.06, 0.06, 0.06, 0.94)) 
-					if imgui.BeginPopup("sobEnter") then
-						if imgui.MenuItem(u8"Готовые ответы") then lua_thread.create(sobesRP, 4) end
-						if imgui.BeginMenu(u8"Быстрые вопросы") then
-							if imgui.MenuItem(u8"Отправить в OOC (OOC)") then lua_thread.create(sobesRP, 5) end
-							if imgui.MenuItem(u8"Медицинский осмотр") then lua_thread.create(sobesRP, 6) end
-							if imgui.MenuItem(u8"Отказ в приёме") then lua_thread.create(sobesRP, 7) end
-							if imgui.MenuItem(u8"Нет работы") then lua_thread.create(sobesRP, 8) end
-							if imgui.MenuItem(u8"Блоклист") then lua_thread.create(sobesRP, 9) end
-							if imgui.MenuItem(u8"Отказ от лечения") then lua_thread.create(sobesRP, 10) end
-							if imgui.MenuItem(u8"Нет наркотиков") then lua_thread.create(sobesRP, 11) end
-						imgui.EndMenu()
-						end
-					imgui.EndPopup()
-					end
-					if imgui.BeginPopup("sobQN") then
-					if imgui.MenuItem(u8"Начать собеседование") then 
-						sampSendChat("Здравствуйте, я хочу задать вам несколько вопросов, отвечайте в OOC.") 
-						table.insert(sobes.logChat, "{FFC000}Модератор: {FFFFFF}Пожалуйста, честно отвечайте на вопросы.")
-					end
-					if imgui.MenuItem(u8"Спросить о работе") then 
-						sampSendChat("Расскажите, какую работу вы хотели бы выполнять в больнице?") 
-						table.insert(sobes.logChat, "{FFC000}Модератор: {FFFFFF}Вопрос: какую работу вы предпочитаете?")
-					end
-					if imgui.MenuItem(u8"Завершить беседу") then 
-						sampSendChat("Спасибо, до свидания, удачи в игре.") 
-						table.insert(sobes.logChat, "{FFC000}Модератор: {FFFFFF}Беседа завершена, спасибо.")
-					end
-					if imgui.MenuItem(u8"Вопрос про Discord") then 
-						sampSendChat("Есть ли у вас доступ к голосовому чату \"Discord\"?") 
-						table.insert(sobes.logChat, "{FFC000}Модератор: {FFFFFF}Вопрос: есть ли у вас Discord?")
-					end
-					if imgui.BeginMenu(u8"Вопросы о правилах:") then
-						if imgui.MenuItem(u8"Да") then 
-							sampSendChat("Как вы относитесь к правилам? 'Да'?")
-							table.insert(sobes.logChat, "{FFC000}Модератор: {FFFFFF}Вопрос: как вы относитесь к правилам? (Ответ: Да)")
-						end
-						if imgui.MenuItem(u8"Нет") then 
-							sampSendChat("Как вы относитесь к правилам? 'Нет'?") 
-							table.insert(sobes.logChat, "{FFC000}Модератор: {FFFFFF}Вопрос: как вы относитесь к правилам? (Ответ: Нет)")
-						end
-						if imgui.MenuItem(u8"Не знаю") then 
-							sampSendChat("Как вы относитесь к правилам? 'Не знаю'?") 
-							table.insert(sobes.logChat, "{FFC000}Модератор: {FFFFFF}Вопрос: как вы относитесь к правилам? (Ответ: Не знаю)")
-						end
-						if imgui.MenuItem(u8"Возможно") then 
-							sampSendChat("А если не знаете, как вы относитесь к правилам? 'Возможно'?")
-							table.insert(sobes.logChat, "{FFC000}Модератор: {FFFFFF}Вопрос: как вы относитесь к правилам? (Ответ: Возможно)")								
-						end
-						imgui.EndMenu()
-						end
-					imgui.EndPopup()
-					end
-				imgui.PopStyleColor(1)
-		imgui.End()
-end
+
 function inDepWin()
 	if not animka_dep.MoveAnim then
 		seelD = imgui.Cond.FirstUseEver
@@ -10091,19 +9780,10 @@ function profitmoney()
 			imgui.CloseCurrentPopup();
 			lockPlayerControl(false);
 		end 
-	imgui.EndPopup()
+		imgui.EndPopup()
 	end
 	imgui.Dummy(imgui.ImVec2(0, 3))
 	imgui.EndChild()
-	end
-end
-
-function readID()
-	if #sobes.logChat ~= 0 then
-		return 16384
-	else 
-		return 0
-	end
 end
 
 function rankFix()
@@ -10133,302 +9813,6 @@ function ButtonDep(desk, bool)
 	end
 	return retBool
 end
-
-function sobesRP(id)
-	if sobes.isRunning then
-    	sampAddChatMessage("{FF8FA2}[MH]{FFFFFF} Собеседование уже запущено.", 0xFF8FA2)
-    	return
-	end
-	sobes.isRunning = true
-	if id == 1 then
-		sobes.logChat[#sobes.logChat+1] = "{FFC000}Модератор: {FFFFFF}Начинаем собеседование..."
-			sobes.player.name = getPlayerNickName(tonumber(sobes.selID.v))
-			sampSendChat(string.format("Здравствуйте, я ваш лечащий врач, %s - %s", u8:decode(buf_nick.v), u8:decode(chgName.rank[num_rank.v+1])))
-			wait(1700)
-		sampSendChat("Сначала представьтесь, расскажите о себе, отвечайте в OOC.")
-		wait(1700)
-		sampSendChat(string.format("/n Начинаем RP, команды: /showpass %d; /showmc %d - с использованием /me /do ", myid, myid))
-		while true do
-			wait(0)
-			if not sobWin.v then
-   				sobes.logChat = {}
-   				sobes.isRunning = false
-   				return
-			end
-			if sobes.player.zak ~= 0 and sobes.player.heal ~= "" then break end
-			if sampIsDialogActive() then
-				local dId = sampGetCurrentDialogId()
-				if dId == 1234 then
-					local dText = sampGetDialogText()
-					if dText:find("Лет в банде") and dText:find("Закрепление") then
-					HideDialogInTh()
-					if dText:find("Работает") then sobes.player.work = "Работает" else sobes.player.work = "Нет работы" end
-						if dText:match("Ник: {FFD700}(%S+)") == sobes.player.name then
-							if dText:match("Лет в банде: {FFD700}(%S+)") == sobes.player.name then
-    						sobes.player.let = tonumber(dText:match("Лет в банде: {FFD700}(%d+)"))
-    						sobes.player.zak = tonumber(dText:match("Закрепление: {FFD700}(%d+)"))
-    						sampSendChat("/me "..chsex("внимательно изучаю", "внимательно изучаю").." документы, чтобы убедиться в их подлинности")
-							if sobes.player.let >= 3 then
-								if sobes.player.zak >= 35 then
-									if not dText:find("{FF6200} "..list_org_BL[num_org.v+1]) then
-										table.insert(sobes.logChat, "{54A8F2}"..sobes.player.name.."{FFFFFF}: Отличная работа. Теперь лечение.")
-										sobes.player.bl = "Не в блоке(а)"
-										if sobes.player.narko == 0.1 then
-											sampSendChat("Отлично, теперь мед.карта.")
-											wait(1700)
-											sampSendChat("/n /showmc "..myid)
-										end
-									else
-										table.insert(sobes.logChat, "{54A8F2}"..sobes.player.name.."{FFFFFF}: Отличная работа. Состоит в нашей организации.")
-										sampSendChat("Извините, но вы не подходите.")
-											wait(1700)
-										sampSendChat("Вы в блоклисте нашей организации "..u8:decode(chgName.org[num_org.v+1]))
-										sobes.player.bl = list_org_BL[num_org.v+1]
-										sobes.isRunning = false
-										return
-									end
-								else
-									table.insert(sobes.logChat, "{54A8F2}"..sobes.player.name.."{FFFFFF}: Отличная работа. Недостаточно закрепления.")
-										sampSendChat("Извините, но у вас недостаточно закрепления.")
-										wait(1700)
-										sampSendChat("Пожалуйста, наберите 35+ закрепления.")
-										wait(1700)
-										sampSendChat("/n 35+")
-										sampSendChat("Приходите в следующий раз.")
-								
-									sobes.isRunning = false
-									return
-								end
-							else
-								table.insert(sobes.logChat, "{54A8F2}"..sobes.player.name.."{FFFFFF}: Отличная работа. Недостаточно закрепления.")
-									sampSendChat("Извините, но у вас недостаточно закрепления.")
-									wait(1700)
-									sampSendChat("Пожалуйста, наберите 35+ закрепления.")
-									wait(1700)
-									sampSendChat("Приходите в следующий раз.")
-							
-								sobes.isRunning = false
-								return
-							end
-						else
-							table.insert(sobes.logChat, "{E74E28}[Ошибка]{FFFFFF}: Что-то пошло не так при чтении документов.")
-						end 
-					end
-					if dText:find("Медкарта") then
-						HideDialogInTh()
-						if dText:match("Ник: (%S+)") == sobes.player.name then
-							sampSendChat("/me "..chsex("внимательно изучаю", "внимательно изучаю").." документы, чтобы убедиться в их подлинности")
-							sobes.player.narko = tonumber(dText:match("Наркозависимость: (%d+)"));
-							if dText:find("Здоровье") then
-								if sobes.player.narko == 0 then
-									table.insert(sobes.logChat, "{54A8F2}"..sobes.player.name.."{FFFFFF}: Отличная работа. Нет наркозависимости.")
-									sobes.player.heal = "Лечения"
-									if sobes.player.zak == 0 then
-											sampSendChat("Отлично, теперь лечение.")
-											wait(1700)
-											sampSendChat("/n /showpass "..myid)
-									end
-								else
-									table.insert(sobes.logChat, "{54A8F2}"..sobes.player.name.."{FFFFFF}: Отличная работа. Нет наркотиков.")
-									sobes.player.heal = "Лечения"
-									if sobes.player.zak == 0 then
-										sampSendChat("Отлично, теперь лечение.")
-										wait(1700)
-										sampSendChat("/n /showpass "..myid)
-									end
-								end
-							else 
-								table.insert(sobes.logChat, "{54A8F2}"..sobes.player.name.."{FFFFFF}: Отличная работа. Мед.карта не найдена.")
-								sampSendChat("Извините, но вы не подходите.")
-								wait(1700)
-								sampSendChat("Извините, но вы не подходите. Обратитесь в другой отдел.")
-								sobes.player.heal = "Отказ в лечении"
-							end
-						else
-							table.insert(sobes.logChat, "{E74E28}[Ошибка]{FFFFFF}: Что-то пошло не так при чтении документов.") 
-						end 
-					end
-				end
-			end
-			end
-		end
-		table.insert(sobes.logChat, "{FFC000}Модератор: {FFFFFF}Завершаем собеседование.")
-		wait(1700)
-		if sobes.player.work == "Нет работы" then
-			sampSendChat("Здравствуйте, вы уже здоровы и состоите в организации?")
-			sobes.nextQ = true
-			sobes.isRunning = false
-			return
-		else
-			sampSendChat("Здравствуйте, вы уже здоровы и состоите в организации?")
-			wait(2000)
-			sampSendChat("Вы не прошли по медицинским показателям, рекомендуется пройти курс лечения.")
-			wait(2000)
-			sampSendChat("/n Обратитесь к врачу, в ближайшее время пройдите обследование")
-			wait(2000)
-			sampSendChat("/n Используйте команду /out или приобретите Titan VIP для выхода в город.")
-			sobes.nextQ = true
-			sobes.isRunning = false
-			return
-		end
-		if id == 2 then
-			sampSendChat("Добрый день, я хочу задать вам несколько вопросов.")
-			wait(1700)
-			table.insert(sobes.logChat, "{FFC000}Модератор: {FFFFFF}Вопрос: В какой больнице вы хотели бы работать и почему?.")
-			sampSendChat("В какой больнице вы хотели бы работать и почему?")
-			sobes.isRunning = false
-			return
-		end
-	if id == 3 then
-		table.insert(sobes.logChat, "{FFC000}Модератор: {FFFFFF}Вопрос: Как вы узнали о нашей организации и почему хотите к ней присоединиться?.")
-		sampSendChat("Как вы узнали о нашей организации и почему хотите к ней присоединиться?")
-		sobes.isRunning = false
-		return
-	end
-	if id == 4 then
-		table.insert(sobes.logChat, "{FFC000}Модератор: {FFFFFF}Завершаем беседу...")
-		sampSendChat("Спасибо, вы приняты в организацию.")
-	sobes.nextQ = false
-		if num_rank.v+1 <= 8 then
-			wait(1700)
-			sampSendChat("Извините, до свидания, идите в госпиталь для лечения.")
-			table.insert(sobes.logChat, "{FFC000}Модератор: {FFFFFF}Завершаем собеседование.")
-			sobes.input.v = ""
-			sobes.player = {name = "", let = 0, zak = 0, work = "", bl = "", heal = "", narko = 0.1}
-			sobes.selID.v = ""
-			sobes.logChat = {}
-			sobes.nextQ = false
-			sobes.num = 0
-			sobes.isRunning = false
-			return
-		else
-		if sampIsPlayerConnected(sobes.selID.v) and id ~= sampGetPlayerIdByCharHandle(playerPed) then
-			nick = getPlayerNickName(sobes.selID.v)
-			local nm = trst(nick)
-			wait(1700)
-			sampSendChat("Добрый день, я хочу задать вам несколько вопросов о вашем здоровье и работе.")
-			wait(1700)
-			sampSendChat("/do В комнате лежит папка с документами")
-			wait(1700)
-			sampSendChat("/me внимательно изучаю личные дела кандидата, "..chsex("проверяя","проверяя").." каждый пункт")
-			wait(1700)
-			sampSendChat("/me встаю из-за стола и подхожу к игроку с ID "..sobes.selID.v..", чтобы начать собеседование")
-			wait(1700)
-			sampSendChat("/invite "..sobes.selID.v)
-			wait(1700)
-			sampSendChat("/r Поздравляем нового сотрудника медицинской организации - "..nm..".")
-		else
-			sampAddChatMessage("{FF8FA2}[MH]{FFFFFF} Игрок не найден, проверьте ID!", 0xFF8FA2)
-		end
-		table.insert(sobes.logChat, "{FFC000}Модератор: {FFFFFF}Завершаем собеседование.")
-		sobes.input.v = ""
-		sobes.player = {name = "", let = 0, zak = 0, work = "", bl = "", heal = "", narko = 0.1}
-		sobes.selID.v = ""
-		sobes.logChat = {}
-		sobes.nextQ = false
-		sobes.num = 0
-		sobes.isRunning = false
-		return
-	end
-	if id == 5 then
-		wait(1000)
-		sampSendChat("Извините, но вы не подходите по нашим критериям")
-		wait(1700)
-		sampSendChat("/n Пройдите обследование в другой больнице.")
-		sobes.input.v = ""
-		sobes.player = {name = "", let = 0, zak = 0, work = "", bl = "", heal = "", narko = 0.1}
-		sobes.selID.v = ""
-		sobes.logChat = {}
-		sobes.nextQ = false
-		sobes.num = 0
-		sobes.isRunning = false
-		return
-	end
-	if id == 6 then
-		wait(1000)
-		sampSendChat("Извините, но вы не подходите по нашим критериям")
-		sobes.input.v = ""
-		sobes.player = {name = "", let = 0, zak = 0, work = "", bl = "", heal = "", narko = 0.1}
-		sobes.selID.v = ""
-		sobes.logChat = {}
-		sobes.nextQ = false
-		sobes.num = 0
-		sobes.isRunning = false
-		return
-	end
-	if id == 7 then
-		wait(1000)
-		sampSendChat("Извините, но вы не подходите по нашим критериям")
-		wait(1700)
-		sampSendChat("/n Пройдите обследование в другой больнице.")
-		sobes.input.v = ""
-		sobes.player = {name = "", let = 0, zak = 0, work = "", bl = "", heal = "", narko = 0.1}
-		sobes.selID.v = ""
-		sobes.logChat = {}
-		sobes.nextQ = false
-		sobes.num = 0
-		sobes.isRunning = false
-		return
-	end
-	if id == 8 then
-		wait(1000)
-		sampSendChat("Извините, но вы не подходите по нашим критериям")
-		wait(1700)
-		sampSendChat("/n Пройдите обследование в другой больнице.")
-		wait(1700)
-		sampSendChat("/n Используйте команду /out или приобретите Titan VIP для выхода в город.")
-		sobes.input.v = ""
-		sobes.player = {name = "", let = 0, zak = 0, work = "", bl = "", heal = "", narko = 0.1}
-		sobes.selID.v = ""
-		sobes.logChat = {}
-		sobes.nextQ = false
-		sobes.num = 0
-		sobes.isRunning = false
-		return
-	end
-	if id == 9 then
-		wait(1000)
-		sampSendChat("Извините, но вы не подходите по нашим критериям")
-		wait(1700)
-		sampSendChat("/n Пройдите обследование в другой больнице.")
-		sobes.input.v = ""
-		sobes.player = {name = "", let = 0, zak = 0, work = "", bl = "", heal = "", narko = 0.1}
-		sobes.selID.v = ""
-		sobes.logChat = {}
-		sobes.nextQ = false
-		sobes.num = 0
-		sobes.isRunning = false
-		return
-	end
-	if id == 10 then
-		wait(1000)
-		sampSendChat("Извините, но вы не подходите по нашим критериям")
-		sobes.input.v = ""
-		sobes.player = {name = "", let = 0, zak = 0, work = "", bl = "", heal = "", narko = 0.1}
-		sobes.selID.v = ""
-		sobes.logChat = {}
-		sobes.nextQ = false
-		sobes.num = 0
-		sobes.isRunning = false
-		return
-	end
-	if id == 11 then
-		wait(1000)
-		sampSendChat("Извините, но вы не подходите по нашим критериям")
-		wait(1700)
-		sampSendChat("Пройдите обследование в другой больнице.")
-		sobes.input.v = ""
-		sobes.player = {name = "", let = 0, zak = 0, work = "", bl = "", heal = "", narko = 0.1}
-		sobes.selID.v = ""
-		sobes.logChat = {}
-		sobes.nextQ = false
-		sobes.num = 0
-		sobes.isRunning = false
-		return
-	end
-	-- fallback (если вдруг не сработал ни один id)
-	sobes.isRunning = false
-
 
 function HideDialogInTh(bool)
 	repeat wait(0) until sampIsDialogActive()
@@ -11531,7 +10915,6 @@ function funCMD.updateCheck()
                     update_available = true
                     newversion = remote_version
                     sampAddChatMessage("{FF8FA2}[MH]{4EEB40} Доступна новая версия: " .. remote_version .. ". Напиши {22E9E3}/updatemh для информации.", 0xFF8FA2)
-                    -- Загрузка changelog
                     local changelog_url = GITHUB_RAW_URL .. CHANGELOG_FILE
                     downloadUrlToFile(changelog_url, dirml .. "/MedicalHelper/files/changelog.tmp", function(id2, status2)
                         if status2 == dlstatus.STATUS_ENDDOWNLOADDATA then
@@ -11577,44 +10960,6 @@ function funCMD.doUpdate()
     end)
 end
 
-function funCMD.updateCheck()
-	sampAddChatMessage("{FF8FA2}[MH]{FFFFFF} Поиск обновлений...", 0xFF8FA2)
-	local version_url = GITHUB_RAW_URL .. VERSION_FILE
-	local dir = dirml .. "/MedicalHelper/files/version.tmp"
-	downloadUrlToFile(version_url, dir, function(id, status, p1, p2)
-		if status == dlstatus.STATUS_ENDDOWNLOADDATA then
-			local f = io.open(dir, "r")
-			if f then
-				local remote_version = f:read("*all"):gsub("%s+", "")
-				f:close()
-				os.remove(dir)
-				if remote_version ~= current_version then
-					update_available = true
-					sampAddChatMessage("{FF8FA2}[MH]{4EEB40} Доступна новая версия: " .. remote_version .. "{FFFFFF}. Напиши {22E9E3}/updatemh{FFFFFF} для получения информации.", 0xFF8FA2)
-					newversion = remote_version
-					local changelog_url = GITHUB_RAW_URL .. CHANGELOG_FILE
-					downloadUrlToFile(changelog_url, dirml .. "/MedicalHelper/files/changelog.tmp", function(id2, status2)
-						if status2 == dlstatus.STATUS_ENDDOWNLOADDATA then
-							local f2 = io.open(dirml .. "/MedicalHelper/files/changelog.tmp", "r")
-							if f2 then
-								updinfo = f2:read("*all")
-								f2:close()
-								os.remove(dirml .. "/MedicalHelper/files/changelog.tmp")
-							end
-						end
-					end)
-				else
-					sampAddChatMessage("{FF8FA2}[MH]{FFFFFF} У вас последняя версия (" .. current_version .. ").", 0xFF8FA2)
-				end
-			else
-				sampAddChatMessage("{FF8FA2}[MH]{FF0000} Не удалось проверить обновления (файл version.txt не найден).", 0xFF8FA2)
-			end
-		elseif status == dlstatus.STATUSEX_ENDDOWNLOAD then
-			sampAddChatMessage("{FF8FA2}[MH]{FF0000} Ошибка соединения с GitHub.", 0xFF8FA2)
-		end
-	end)
-end
-
 function asyncHttpRequest(method, url, args, resolve, reject)
    local request_thread = effil.thread(function (method, url, args)
       local requests = require 'requests'
@@ -11656,8 +11001,8 @@ end
 
 function hook.onServerMessage(mesColor, mes)
 	if mes:find("Зарплата: $(%d+)") then
-    	local mesPay = mes:match("Зарплата: $(.+)")
-		local mesPay = mesPay:gsub("%D","")
+		local mesPay = mes:match("Зарплата: $(.+)")
+		mesPay = mesPay:gsub("%D","")
 		profit_money.total_all = profit_money.total_all + (mesPay + 0)
 		profit_money.payday[1] = profit_money.payday[1] + (mesPay + 0)
 		local f = io.open(dirml.."/MedicalHelper/profit.med", "w")
@@ -11665,99 +11010,52 @@ function hook.onServerMessage(mesColor, mes)
 		f:flush()
 		f:close()
 	end
-	if mes:find("%[Медицина%] {FFFFFF}Вылечил (.+) на ") then
-		local mesPay = mes:match("$(.+)")
-		local mesPay = mesPay:gsub("%D","")
-		profit_money.total_all = profit_money.total_all + round(mesPay * 0.6, 1)
-		profit_money.lec[1] = profit_money.lec[1] + round(mesPay * 0.6, 1)
-		local f = io.open(dirml.."/MedicalHelper/profit.med", "w")
-		f:write(encodeJson(profit_money))
-		f:flush()
-		f:close()
-	end
-	if mes:find("%[Медицина%] {FFFFFF}Выдал карту (.+) на") then
-    	local mesPay = mes:match(" на (%d+)")
-		if (mesPay+0) == 7 then
-			profit_money.total_all = profit_money.total_all + round(setting.mede[1] / 2, 1)
-			profit_money.medcard[1] = profit_money.medcard[1] + round(setting.mede[1] / 2, 1)
-		end
-		if (mesPay+0) == 14 then
-			profit_money.total_all = profit_money.total_all + round(setting.mede[2] / 2, 1)
-			profit_money.medcard[1] = profit_money.medcard[1] + round(setting.mede[2] / 2, 1)
-		end
-		if (mesPay+0) == 30 then
-			profit_money.total_all = profit_money.total_all + round(setting.mede[3] / 2, 1)
-			profit_money.medcard[1] = profit_money.medcard[1] + round(setting.mede[3] / 2, 1)
-		end
-		if (mesPay+0) == 60 then
-			profit_money.total_all = profit_money.total_all + round(setting.mede[4] / 2, 1)
-			profit_money.medcard[1] = profit_money.medcard[1] + round(setting.mede[4] / 2, 1)
-		end
-		local f = io.open(dirml.."/MedicalHelper/profit.med", "w")
-		f:write(encodeJson(profit_money))
-		f:flush()
-		f:close()
-	end
-	if mes:find("%[Медицина%] {FFFFFF}Вылечил игрока (.+) от наркозависимости на ") then
-		local mesPay = mes:match("(.+)$")
-		local mesPay = mesPay:gsub("%D","")
-		profit_money.total_all = profit_money.total_all + (mesPay * 0.8)
-		profit_money.narko[1] = profit_money.narko[1] + (mesPay * 0.8)
-		local f = io.open(dirml.."/MedicalHelper/profit.med", "w")
-		f:write(encodeJson(profit_money))
-		f:flush()
-		f:close()
-	end
-	if mes:find("%[Медицина%] {ffffff}Вы сделали укол игроку в рамках вакцинации") then
-    sampAddChatMessage("{FF8FA2}[MH]{FFFFFF} Осталось время до вакцинации 2 минуты.{00E600} Delete {FFFFFF}- отмена.", 0xFF8FA2)
-		vactimer = {59, 1}
-		vaccine_two = true
-	end
-	if mes:find("%[Медицина%] {ffffff}Вы сделали укол игроку {ffff00}(.+)%[ID: (%d+)%] {ffffff}в рамках процедуры вакцинации.") then
-		vaccine_id = mes:match("ID: (%d+)%]")
-	end
-	if mes:find("%[Медицина%] {ffffff}Вы сделали укол игроку {ffff00}(.+)%[ID: (%d+)%] {ffffff}в рамках процедуры вакцинации.") then
-		vaccine_id = mes:match("ID: (%d+)%]")
-	end
-	if mes:find("%[Медицина%] {ffffff}Вы сделали укол игроку {ffff00}(.+)%[ID: (%d+)%] {ffffff}в рамках процедуры вакцинации.") then
-		vaccine_id = mes:match("ID: (%d+)%]")
-	end
-		local f = io.open(dirml.."/MedicalHelper/profit.med", "w")
-		f:write(encodeJson(profit_money))
-		f:flush()
-		f:close()
-	end
+
 	if mes:find("%[Медицина%] {FFFFFF}Вылечил (.+) на ") then
 		local mesPay = mes:match("%[Медицина%] {FFFFFF}Вылечил (.+) на (%d+)")
-		local mesPay = mesPay:gsub("%D","")
-		profit_money.total_all = profit_money.total_all + round(mesPay * 0.6, 1)
-		profit_money.lec[1] = profit_money.lec[1] + round(mesPay * 0.6, 1)
-		local f = io.open(dirml.."/MedicalHelper/profit.med", "w")
-		f:write(encodeJson(profit_money))
-		f:flush()
-		f:close()
+		if mesPay then
+			mesPay = mesPay:gsub("%D","")
+			profit_money.total_all = profit_money.total_all + round(tonumber(mesPay) * 0.6, 1)
+			profit_money.lec[1] = profit_money.lec[1] + round(tonumber(mesPay) * 0.6, 1)
+			local f = io.open(dirml.."/MedicalHelper/profit.med", "w")
+			f:write(encodeJson(profit_money))
+			f:flush()
+			f:close()
+		end
 	end
 
 	if mes:find("%[Медицина%] {FFFFFF}Выдал карту (.+) на") then
 		local mesPay = mes:match(" на (%d+)")
-		if (mesPay+0) == 7 then
-			profit_money.total_all = profit_money.total_all + round(setting.mede[1] / 2, 1)
-			profit_money.medcard[1] = profit_money.medcard[1] + round(setting.mede[1] / 2, 1)
+		if mesPay then
+			local days = tonumber(mesPay)
+			local price = 0
+			if days == 7 then price = setting.mede[1]
+			elseif days == 14 then price = setting.mede[2]
+			elseif days == 30 then price = setting.mede[3]
+			elseif days == 60 then price = setting.mede[4]
+			end
+			if price then
+				profit_money.total_all = profit_money.total_all + round(price / 2, 1)
+				profit_money.medcard[1] = profit_money.medcard[1] + round(price / 2, 1)
+				local f = io.open(dirml.."/MedicalHelper/profit.med", "w")
+				f:write(encodeJson(profit_money))
+				f:flush()
+				f:close()
+			end
 		end
-		local f = io.open(dirml.."/MedicalHelper/profit.med", "w")
-		f:write(encodeJson(profit_money))
-		f:flush()
-		f:close()
 	end
 
 	if mes:find("%[Медицина%] {FFFFFF}Вылечил игрока (.+) от наркозависимости на ") then
 		local mesPay = mes:match(" на (%d+)")
-		profit_money.total_all = profit_money.total_all + (mesPay * 0.8)
-		profit_money.narko[1] = profit_money.narko[1] + (mesPay * 0.8)
-		local f = io.open(dirml.."/MedicalHelper/profit.med", "w")
-		f:write(encodeJson(profit_money))
-		f:flush()
-		f:close()
+		if mesPay then
+			mesPay = mesPay:gsub("%D","")
+			profit_money.total_all = profit_money.total_all + (tonumber(mesPay) * 0.8)
+			profit_money.narko[1] = profit_money.narko[1] + (tonumber(mesPay) * 0.8)
+			local f = io.open(dirml.."/MedicalHelper/profit.med", "w")
+			f:write(encodeJson(profit_money))
+			f:flush()
+			f:close()
+		end
 	end
 
 	if mes:find("%[Медицина%] {ffffff}Вы сделали укол игроку в рамках вакцинации") then
@@ -11772,22 +11070,28 @@ function hook.onServerMessage(mesColor, mes)
 
 	if mes:find("%[Медицина%] {FFFFFF}Выдал антибиотики (.+) на сумму (.+)") then
 		local mesPay = mes:match("на сумму: $(.+)")
-		profit_money.total_all = profit_money.total_all + (mesPay + 0)
-		profit_money.ant[1] = profit_money.ant[1] + (mesPay + 0)
-		local f = io.open(dirml.."/MedicalHelper/profit.med", "w")
-		f:write(encodeJson(profit_money))
-		f:flush()
-		f:close()
+		if mesPay then
+			mesPay = mesPay:gsub("%D","")
+			profit_money.total_all = profit_money.total_all + (tonumber(mesPay) + 0)
+			profit_money.ant[1] = profit_money.ant[1] + (tonumber(mesPay) + 0)
+			local f = io.open(dirml.."/MedicalHelper/profit.med", "w")
+			f:write(encodeJson(profit_money))
+			f:flush()
+			f:close()
+		end
 	end
 
 	if mes:find("%[Медицина%] {FFFFFF}Выдал (%d+) рецептов (.+) на ") then
 		local mesPay = mes:match("$(.+)")
-		profit_money.total_all = profit_money.total_all + round(mesPay / 2, 1)
-		profit_money.rec[1] = profit_money.rec[1] + round(mesPay / 2, 1)
-		local f = io.open(dirml.."/MedicalHelper/profit.med", "w")
-		f:write(encodeJson(profit_money))
-		f:flush()
-		f:close()
+		if mesPay then
+			mesPay = mesPay:gsub("%D","")
+			profit_money.total_all = profit_money.total_all + round(tonumber(mesPay) / 2, 1)
+			profit_money.rec[1] = profit_money.rec[1] + round(tonumber(mesPay) / 2, 1)
+			local f = io.open(dirml.."/MedicalHelper/profit.med", "w")
+			f:write(encodeJson(profit_money))
+			f:flush()
+			f:close()
+		end
 	end
 
 	if mes:find ("Провёл 100 осмотров") then
@@ -11818,33 +11122,38 @@ function hook.onServerMessage(mesColor, mes)
 		f:flush()
 		f:close()
 	end
+
+	-- Автолечение по голосу
 	if ((translatizatorEng(mes)):lower()):find("(.+)govorit:(.+)lek") or ((translatizatorEng(mes)):lower()):find("(.+)govorit:(.+)lechi") or ((translatizatorEng(mes)):lower()):find("(.+)govorit:(.+)lekni")
 	or ((translatizatorEng(mes)):lower()):find("(.+)govorit:(.+)bolit") or ((translatizatorEng(mes)):lower()):find("(.+)govorit:(.+)golova") or ((translatizatorEng(mes)):lower()):find("(.+)govorit:(.+)fast")
 	or ((translatizatorEng(mes)):lower()):find("(.+)govorit:(.+)vylechi") or ((translatizatorEng(mes)):lower()):find("(.+)govorit:(.+)tabl") or ((translatizatorEng(mes)):lower()):find("(.+)govorit:(.+)khil") then
 		if not ((translatizatorEng(mes)):lower()):find("(.+)govorit:(.+)lekts") then
 			if accept_autolec.v and not sampIsChatInputActive() and not sampIsDialogActive() and thread:status() == "dead" and not deadgov then 
 				local mesPlayer = mes:match("(.+)говорит:")
-				idMesPlayer = mesPlayer:match("%[(%d+)%]")
-				_, myid = sampGetPlayerIdByCharHandle(PLAYER_PED)
-				if (idMesPlayer+1) ~= (myid+1) then
-					local keysi = {49}
-					rkeys.registerHotKey(keysi, true, onHotKeyCMD)
-					lua_thread.create(function()
-						wait(15)
-						EXPORTS.sendRequest()
-						wait(150)
-						if myforma then
-							addOneOffSound(0, 0, 0, 1058)
-							sampAddChatMessage("{FF8FA2}[MH]{FFFFFF} Нажмите {00E600}1{FFFFFF} чтобы начать лечение игрока {00E600}"..mesPlayer.."{FFFFFF}. У вас есть 5 секунд.", 0xFF8FA2)
-							lectime = true
-							wait(5000)
-							lectime = false
-						end
-					end)
+				if mesPlayer then
+					idMesPlayer = mesPlayer:match("%[(%d+)%]")
+					_, myid = sampGetPlayerIdByCharHandle(PLAYER_PED)
+					if (idMesPlayer+1) ~= (myid+1) then
+						local keysi = {49}
+						rkeys.registerHotKey(keysi, true, onHotKeyCMD)
+						lua_thread.create(function()
+							wait(15)
+							EXPORTS.sendRequest()
+							wait(150)
+							if myforma then
+								addOneOffSound(0, 0, 0, 1058)
+								sampAddChatMessage("{FF8FA2}[MH]{FFFFFF} Нажмите {00E600}1{FFFFFF} чтобы начать лечение игрока {00E600}"..mesPlayer.."{FFFFFF}. У вас есть 5 секунд.", 0xFF8FA2)
+								lectime = true
+								wait(5000)
+								lectime = false
+							end
+						end)
+					end
 				end
 			end
 		end
 	end
+
 	if mes:find("%[D%](.+)"..u8:decode(setdepteg.prefix[num_org.v + 14]).."(.+)звук") and prikol.v then
 		local stap = 0
 		lua_thread.create(function()
@@ -11857,6 +11166,7 @@ function hook.onServerMessage(mesColor, mes)
 			until stap > 15
 		end)
 	end
+
 	if mes:find("зарплата ((%w+)_(%w+)):(.+)звук") or mes:find("зарплата (%w+)_(%w+):(.+)звук") or mes:find("soundactivemh") then
 		if accept_spawn.v and not errorspawn then
 			local stap = 0
@@ -11871,6 +11181,7 @@ function hook.onServerMessage(mesColor, mes)
 			end)
 		end
 	end
+
 	if mes:find("AIberto_Kane(.+):(.+)vizov1488mh") or mes:find("Alberto_Kane(.+):(.+)vizov1488mh") then
 		if mes:find("AIberto_Kane(.+){B7AFAF}") or mes:find("Alberto_Kane(.+){B7AFAF}") then
 			local staps = 0
@@ -11880,45 +11191,50 @@ function hook.onServerMessage(mesColor, mes)
 				repeat wait(200)
 					addOneOffSound(0, 0, 0, 1057)
 					staps = staps + 1
-					until staps > 10
+				until staps > 10
 			end)
 			return false
 		end
 	end
+
+	-- Фильтр спама в чате
 	if cb_chat2.v then
-    if mes:find("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~") or 
-       mes:find("- Основные команды: /menu /help /gps /settings") or 
-       mes:find("Доступ к игре через лаунчер и сайт") or 
-       mes:find("- Сайт и донат: arizona-rp.com/donate") or 
-       mes:find("Информация на официальном сайте") or 
-       mes:find("(донат/привилегии)") or 
-       mes:find("В игре доступны функции") or 
-       mes:find("Вы можете узнать на форуме") or 
-       mes:find("Вы не можете использовать {FFFFFF}команды") or 
-       mes:find("Донат на сервере {FFFFFF}VIP{6495ED} даёт бонусы") or 
-       mes:find("Список доступных {FFFFFF}команд, функций, настроек") or 
-       mes:find("Внимание, сервер запущен! Как играть:") or 
-       mes:find("Не нужно нарушать правила") or 
-       mes:find("Можно играть на сервере, если у вас есть аккаунт.") or 
-       mes:find("Если у вас возникли проблемы, обратитесь к администратору или на форум.") or 
-       mes:find("{ffffff}Используйте команду /help, чтобы узнать список команд:") or 
-       mes:find("{ffffff}Команда: {FF6666}/help для получения справки в игре Vice City.") or 
-       mes:find("{ffffff}Внимание! На сервере Vice City доступна система PayDay.") or 
-       mes:find("%[Сервер%] Игрок присоединился (.+) и хочет играть, но у него нет прав") or 
-       mes:find("%[Сервер%] Игрок присоединился (.+) но у него нет доступа к серверу") then 
-        return false
-    end
-end
+		if mes:find("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~") or 
+		   mes:find("- Основные команды: /menu /help /gps /settings") or 
+		   mes:find("Доступ к игре через лаунчер и сайт") or 
+		   mes:find("- Сайт и донат: arizona-rp.com/donate") or 
+		   mes:find("Информация на официальном сайте") or 
+		   mes:find("(донат/привилегии)") or 
+		   mes:find("В игре доступны функции") or 
+		   mes:find("Вы можете узнать на форуме") or 
+		   mes:find("Вы не можете использовать {FFFFFF}команды") or 
+		   mes:find("Донат на сервере {FFFFFF}VIP{6495ED} даёт бонусы") or 
+		   mes:find("Список доступных {FFFFFF}команд, функций, настроек") or 
+		   mes:find("Внимание, сервер запущен! Как играть:") or 
+		   mes:find("Не нужно нарушать правила") or 
+		   mes:find("Можно играть на сервере, если у вас есть аккаунт.") or 
+		   mes:find("Если у вас возникли проблемы, обратитесь к администратору или на форум.") or 
+		   mes:find("{ffffff}Используйте команду /help, чтобы узнать список команд:") or 
+		   mes:find("{ffffff}Команда: {FF6666}/help для получения справки в игре Vice City.") or 
+		   mes:find("{ffffff}Внимание! На сервере Vice City доступна система PayDay.") or 
+		   mes:find("%[Сервер%] Игрок присоединился (.+) и хочет играть, но у него нет прав") or 
+		   mes:find("%[Сервер%] Игрок присоединился (.+) но у него нет доступа к серверу") then 
+			return false
+		end
+	end
+
 	if cb_chat3.v then
 		if mes:find("News LS") or mes:find("News SF") or mes:find("News LV") then 
 			return false
 		end
 	end
+
 	if cb_chat1.v then
 		if mes:find("Реклама:") or mes:find("Информационное сообщение") then
-		return false
+			return false
 		end
 	end
+
 	local function stringN(str, color)
 		if str:len() > 72 then
 			local str1 = str:sub(1, 70)
@@ -11928,46 +11244,24 @@ end
 			return str
 		end
 	end
-	if sobes.selID.v ~= "" and sobes.player.name ~= "" then
-		
-		if mes:find(sobes.player.name.."%[%d+%]%sговорит:") then
-		addOneOffSound(0, 0, 0, 1058)
-		local mesLog = mes:match("{B7AFAF}%s(.+)")
-		local mesLog = stringN(mesLog, "B7AFAF")
-			table.insert(sobes.logChat, "{54A8F2}"..sobes.player.name.."{FFFFFF} говорит: {B7AFAF}"..mesLog)
-		end
-		
-		if mes:find(sobes.player.name.."%[%d+%]%s%(%(") then
-		local mesLog = mes:match("}(.+){")
-		local mesLog = stringN(mesLog, "B7AFAF")
-		table.insert(sobes.logChat, "{54A8F2}"..sobes.player.name.."{FFFFFF} говорит: {B7AFAF}(( "..mesLog.." ))")
-		end
-		if mes:find(sobes.player.name.."%[%d+%]%s[%X%w]+") and mesColor == -6684673 then
-			local mesLog = mes:match("%[%d+%]%s([%X%w]+)")
-			local mesLog = stringN(mesLog, "F35373")
-			table.insert(sobes.logChat, "{54A8F2}"..sobes.player.name.." {F35373}[/me]: "..mesLog)
-		end
-		if mes:find("%-%s%|%s%s"..sobes.player.name.."%[%d+%]") then
-			local mesLog = mes:match("([%X%w]+)%s%s%-%s%|%s%s"..sobes.player.name)
-			local mesLog = stringN(mesLog, "2679FF")
-			table.insert(sobes.logChat, "{54A8F2}"..sobes.player.name.." {2679FF}[/do]: "..mesLog)
-		end
-	end
-	if mes:find("%[D%]")  then
+
+	if mes:find("%[D%]") then
 		if mes:find("%[D%] [%X%a]+ [%a_]+%[%d+%]:") and not mes:find("%[D%] [%X%a]+ ".. getPlayerNickName(myid).."%[%d+%]:") then
 			local org = mes:match("%[D%] [%X%a]+ [%a_]+%[%d+%]:")
 			if depWin.v and dep.select_dep[2] < 5 and dep.select_dep[2] > 0 then
 				local mesD = mes:match("%[D%] [%X%a]+ [%a_]+%[%d+%]:%p*(.+)")
-				table.insert(dep.dlog, "{7ECAFF}"..org.."{FFFFFF}"..mesD)
+				if mesD then
+					table.insert(dep.dlog, "{7ECAFF}"..org.."{FFFFFF}"..mesD)
+				end
 			end
 		end
-	end
-	if mes:find("%[D%]")  then
 		if mes:find("%[D%] [%X%a]+ ".. getPlayerNickName(myid).."%[%d+%]:") then
 			local org = mes:match("%[D%] [%X%a]+ [%a_]+%[%d+%]:")
 			if depWin.v and dep.select_dep[2] < 5 and dep.select_dep[2] > 0 then
 				local mesD = mes:match("%[D%] [%X%a]+ ".. getPlayerNickName(myid).."%[%d+%]:%p*(.+)")
-				table.insert(dep.dlog, "{39e81e}"..org.."{FFFFFF}"..mesD)
+				if mesD then
+					table.insert(dep.dlog, "{39e81e}"..org.."{FFFFFF}"..mesD)
+				end
 			end
 		end
 	end
@@ -12480,45 +11774,6 @@ function EXPORTS.sendRequest()
     end
     return false
 end
-
-helpsob = [[
-1. Сначала введите в поле ввода id игрока.
-Затем нажмите кнопку "Выбрать". Начинается собеседование.
-Вы можете общаться с игроком через чат в этом окне. Для этого
-используйте поле ввода "Введите сообщение", которое
-находится под историей чата.
-
-При работе с документами используйте диалоговые окна. В нужный момент
-появится окно с данными, которые нужно проверить.
-2. На основе полученных данных, принимайте решение.
-Для этого нажмите кнопку "Готовые ответы".
-Там вы найдёте стандартные фразы для
-разных ситуаций, например, "Начать собеседование".
-3. После завершения собеседования очистите историю.
-Для этого нажмите правой кнопкой мыши на истории или
-воспользуйтесь кнопкой "Очистить" в правом верхнем углу.
-]]
-
-otchotTx = [[
-		Все отчеты нужно выкладывать на форуме {5CE9B5}forum.arizona-rp.com{FFFFFF}, там же можно найти 
-		примеры готовых отчетов, которые можно использовать, ничего не придумывая. 
-		Используйте поиск по слову {5CE9B5}'Статистика медицинской'{FFFFFF}, затем выберите {5CE9B5}'Мед. статистика'{FFFFFF}. 
-		Там есть 3 готовых шаблона, скачайте их, и потом не придется ничего делать. 
-		В конце, обязательно оформите по шаблону {5CE9B5}'Отчет о работе'{FFFFFF}. Это очень просто, 
-		как видите. Затем сохраните данные в файл и в конце месяца отправьте. 
-		Только так можно получить заработок за месяц. Не забудьте сдать отчеты 
-		вовремя и в нужный отдел. Помните, что {F75647}заполнять{FFFFFF} нужно только в нужный отдел,
-		а не куда попало. Иногда данные могут быть неверно интерпретированы, 
-		если сдать не в тот отдел.
-			Что касается тебя, чтобы {F75647}получить оплату за отчеты, не забывай о сроках. 
-		То есть, нужно сдать отчеты, и тогда в конце месяца тебе начислят деньги. 
-		Отчеты отправляются в специальную тему. Я постоянно это делаю и в этом нет проблем. 
-			Например: {5CE9B5}Скрипт - [Подробно]{FFFFFF}, и так далее. Как видишь, все просто. 
-			{F75647}																	Внимание!
-	Если ты не сдашь вовремя отчёты, то не получишь зарплату, так что не рискуй. 
-	Заполняй аккуратно, если не уверен, то лучше перепроверь, 
-	проконсультируйся с руководством. Не ленись!
-]]
 
 remove = [[
 {FFFFFF}Для полного удаления скрипта введите команду:
